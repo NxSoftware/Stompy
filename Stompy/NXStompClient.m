@@ -22,13 +22,17 @@ NSString * const NXStompErrorDomain = @"NXStompErrorDomain";
 
 // Standard frame headers
 NSString * const NXStompHeaderAcceptVersion = @"accept-version";
-NSString * const NXStompHeaderHost = @"host";
-NSString * const NXStompHeaderReceipt = @"receipt";
+NSString * const NXStompHeaderVersion       = @"version";
+NSString * const NXStompHeaderHost          = @"host";
+NSString * const NXStompHeaderReceipt       = @"receipt";
 
-typedef NS_OPTIONS(NSUInteger, NXStompVersion) {
-    NXStompVersion1_1 = 1 << 1,
-    NXStompVersion1_2 = 1 << 2,
+// Supported/accepted versions
+typedef NS_ENUM(NSUInteger, NXStompVersion) {
+    NXStompVersionUnknown,
+    NXStompVersion1_1,
+    NXStompVersion1_2,
 };
+NSString * const NXStompAcceptVersions = @"1.1,1.2";
 
 typedef NS_ENUM(NSUInteger, NXStompState) {
     NXStompStateDisconnected,
@@ -44,9 +48,14 @@ typedef void(^NXStompReceiptHandler)();
 @property (nonatomic, copy) NSString *host;
 
 /**
- * The versions of the STOMP protocol to use. Defaults to 1.2
+ * The versions of the STOMP protocol this client supports.
  */
-@property (nonatomic, assign) NXStompVersion supportedVersions;
+
+/**
+ * The version of the STOMP protocol to use as negotiated with the server.
+ * Defaults to NXStompVersionUnknown until a connection has been established.
+ */
+@property (nonatomic, assign) NXStompVersion negotiatedVersion;
 
 @property (nonatomic, assign) NXStompState state;
 
@@ -70,14 +79,6 @@ typedef void(^NXStompReceiptHandler)();
     client.transport = transport;
     client.transport.delegate = client;
     return client;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _supportedVersions = NXStompVersion1_1 | NXStompVersion1_2;
-    }
-    return self;
 }
 
 #pragma mark - Public
@@ -109,19 +110,7 @@ typedef void(^NXStompReceiptHandler)();
     // 1.1 and 1.2 clients SHOULD continue to use the CONNECT command to remain backward compatible with STOMP 1.0 servers
     NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandConnect];
     
-    NSMutableArray *acceptVersions = [[NSMutableArray alloc] initWithCapacity:2];
-    
-    if (self.supportedVersions & NXStompVersion1_1) {
-        [acceptVersions addObject:@"1.1"];
-    }
-    if (self.supportedVersions & NXStompVersion1_2) {
-        [acceptVersions addObject:@"1.2"];
-    }
-    
-    if ([acceptVersions count]) {
-        [frame setHeader:NXStompHeaderAcceptVersion
-                   value:[acceptVersions componentsJoinedByString:@","]];
-    }
+    [frame setHeader:NXStompHeaderAcceptVersion value:NXStompAcceptVersions];
     
     // TODO: This returns a bad connect ERROR from the server
     // Something to do with RabbitMQ
@@ -152,8 +141,7 @@ typedef void(^NXStompReceiptHandler)();
     if (self.state == NXStompStateConnecting) {
         // We're expecting either a CONNECTED frame...
         if (frame.command == NXStompFrameCommandConnected) {
-            self.state = NXStompStateConnected;
-            [self.delegate stompClientDidConnect:self];
+            [self handleConnectedFrame:frame];
         }
         
         // or an ERROR
@@ -207,6 +195,23 @@ typedef void(^NXStompReceiptHandler)();
 
 - (void)forceDisconnect {
     [self.transport close];
+}
+
+#pragma mark - Private - Frame Handlers
+
+- (void)handleConnectedFrame:(NXStompFrame *)frame {
+    
+    NSString *negotiatedVersion = [frame valueForHeader:NXStompHeaderVersion];
+    if ([negotiatedVersion isEqualToString:@"1.2"]) {
+        self.negotiatedVersion = NXStompVersion1_2;
+    } else if ([negotiatedVersion isEqualToString:@"1.1"]) {
+        self.negotiatedVersion = NXStompVersion1_1;
+    } else {
+        NSAssert(0, @"Somehow managed to negotiate to an unknown protocol version.");
+    }
+    
+    self.state = NXStompStateConnected;
+    [self.delegate stompClientDidConnect:self];
 }
 
 #pragma mark - Private - Utilities
