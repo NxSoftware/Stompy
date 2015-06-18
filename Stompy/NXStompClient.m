@@ -328,7 +328,12 @@ typedef void(^NXStompReceiptHandler)();
                 NSString *headerName = [line substringToIndex:indexOfFirstColon];
                 NSString *headerValue = [line substringFromIndex:indexOfFirstColon + 1];
                 
-                [frame setHeader:headerName value:headerValue];
+                // Don't overwrite existing headers
+                // http://stomp.github.io/stomp-specification-1.2.html#Repeated_Header_Entries
+                // http://stomp.github.io/stomp-specification-1.1.html#Repeated_Header_Entries
+                if ([frame valueForHeader:headerName] == nil) {
+                    [frame setHeader:headerName value:headerValue];
+                }
             }
             
             // TODO: Body
