@@ -47,6 +47,12 @@
 - (void)stompClientDidConnect:(NXStompClient *)stompClient {
     NSLog(@"DID CONNECT");
     self.disconnectButton.enabled = YES;
+
+    NSData *message = [NSJSONSerialization dataWithJSONObject:@{@"name" : @"steve"}
+                                                      options:0
+                                                        error:nil];
+    
+    [self.stomp sendMessageData:message toDestination:@"/app/hello"];
 }
 
 - (void)stompClient:(NXStompClient *)stompClient didDisconnectWithError:(NSError *)error {
