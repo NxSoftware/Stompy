@@ -60,6 +60,10 @@ NSString * const NXStompHeaderContentLength = @"content-length";
     self.headers[header] = [value copy];
 }
 
+- (NSString *)valueForHeader:(NSString *)header {
+    return self.headers[header];
+}
+
 - (NSDictionary *)allHeaders {
     return [self.headers copy];
 }

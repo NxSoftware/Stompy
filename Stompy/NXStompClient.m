@@ -23,6 +23,7 @@ NSString * const NXStompErrorDomain = @"NXStompErrorDomain";
 // Standard frame headers
 NSString * const NXStompHeaderAcceptVersion = @"accept-version";
 NSString * const NXStompHeaderHost = @"host";
+NSString * const NXStompHeaderReceipt = @"receipt";
 
 typedef NS_OPTIONS(NSUInteger, NXStompVersion) {
     NXStompVersion1_1 = 1 << 1,
@@ -33,7 +34,10 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
     NXStompStateDisconnected,
     NXStompStateConnecting,
     NXStompStateConnected,
+    NXStompStateDisconnecting,
 };
+
+typedef void(^NXStompReceiptHandler)();
 
 @interface NXStompClient () <NXStompTransportDelegate>
 @property (nonatomic, strong, nonnull) NXStompAbstractTransport *transport;
@@ -45,6 +49,16 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
 @property (nonatomic, assign) NXStompVersion supportedVersions;
 
 @property (nonatomic, assign) NXStompState state;
+
+/**
+ *  A counter that can be used to generate unique receipt headers.
+ */
+@property (nonatomic, assign) NSUInteger receiptCounter;
+
+/**
+ *  A dictionary of receipt headers : receipt handler blocks
+ */
+@property (nonatomic, copy) NSMutableDictionary *receiptHandlers;
 
 @end
 
@@ -70,12 +84,23 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
 
 - (void)connect {
     self.state = NXStompStateConnecting;
-    [self.transport connect];
+    [self.transport open];
+}
+
+- (void)disconnect {
+    self.state = NXStompStateDisconnecting;
+
+    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandDisconnect];
+    
+    __weak typeof(self) weakSelf = self;
+    [self sendFrame:frame withReceiptHandler:^{
+        [weakSelf forceDisconnect];
+    }];
 }
 
 #pragma mark - Transport Delegate
 
-- (void)transportDidConnect:(NXStompAbstractTransport *)transport {
+- (void)transportDidOpen:(NXStompAbstractTransport *)transport {
     
     // https://stomp.github.io/stomp-specification-1.2.html#CONNECT_or_STOMP_Frame
     // https://stomp.github.io/stomp-specification-1.1.html#CONNECT_or_STOMP_Frame
@@ -98,16 +123,25 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
                    value:[acceptVersions componentsJoinedByString:@","]];
     }
     
-    // TODO: This returns a bad connect ERROR from the server - investigate
+    // TODO: This returns a bad connect ERROR from the server
+    // Something to do with RabbitMQ
     [frame setHeader:NXStompHeaderHost value:[self.transport host]];
     
     // TODO: Heartbeat
     
     // TODO: Login & password
     
-    NSData *serializedFrame = [self serializeFrame:frame];
+    [self sendFrame:frame];
+}
+
+- (void)transportDidClose:(NXStompAbstractTransport *)transport {
     
-    [self.transport sendData:serializedFrame];
+    // Wipe out the receipt handlers and reset the counter
+    _receiptHandlers = nil;
+    _receiptCounter = 0;
+    
+    self.state = NXStompStateDisconnected;
+    [self.delegate stompClient:self didDisconnectWithError:nil];
 }
 
 - (void)transport:(NXStompAbstractTransport *)transport didReceiveMessage:(NSString *)message {
@@ -126,30 +160,79 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
         else if (frame.command == NXStompFrameCommandError) {
             self.state = NXStompStateDisconnected;
             [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:NXStompErrorDomain
-                                                                                       code:1
+                                                                                       code:NXStompConnectionError
                                                                                    userInfo:nil]];
+        }
+    }
+    
+    // Handle receipt frames
+    if (frame.command == NXStompFrameCommandReceipt) {
+        NSString *receipt = [frame valueForHeader:NXStompHeaderReceipt];
+        NXStompReceiptHandler handler = _receiptHandlers[receipt];
+        if (handler) {
+            handler();
         }
     }
 }
 
 #pragma mark - Private
 
+- (void)sendFrame:(NXStompFrame *)frame {
+    if (self.state == NXStompStateDisconnecting
+    && frame.command != NXStompFrameCommandDisconnect) {
+        NSAssert(0, @"Cannot send frames while in the process of disconnecting");
+        return;
+    }
+    
+    NSData *serializedFrame = [self serializeFrame:frame];
+    
+#if NXSTOMPDEBUG
+    NSLog(@"Sending message: %@", [[NSString alloc] initWithData:serializedFrame encoding:NSUTF8StringEncoding]);
+#endif
+    
+    [self.transport sendData:serializedFrame];
+}
+
+- (void)sendFrame:(NXStompFrame *)frame withReceiptHandler:(NXStompReceiptHandler)receiptHandler {
+    
+    // Associate a receipt header with this frame before it is sent
+    NSString *receipt = [NSString stringWithFormat:@"%lu", ++self.receiptCounter];
+    [frame setHeader:NXStompHeaderReceipt value:receipt];
+    
+    // Track this receipt request
+    self.receiptHandlers[receipt] = receiptHandler;
+    
+    [self sendFrame:frame];
+}
+
+- (void)forceDisconnect {
+    [self.transport close];
+}
+
+#pragma mark - Private - Utilities
+
 - (NSString *)stringForCommand:(NXStompFrameCommand)command {
     switch (command) {
         case NXStompFrameCommandMessage:
             return @"MESSAGE";
-            
+
         case NXStompFrameCommandSend:
             return @"SEND";
             
         case NXStompFrameCommandError:
             return @"ERROR";
             
+        case NXStompFrameCommandReceipt:
+            return @"RECEIPT";
+            
         case NXStompFrameCommandConnect:
             return @"CONNECT";
             
         case NXStompFrameCommandConnected:
             return @"CONNECTED";
+            
+        case NXStompFrameCommandDisconnect:
+            return @"DISCONNECT";
             
         default:
             return nil;
@@ -159,18 +242,31 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
 - (NXStompFrameCommand)commandForString:(NSString *)commandString {
     if ([commandString isEqualToString:@"MESSAGE"]) {
         return NXStompFrameCommandMessage;
+        
     } else if ([commandString isEqualToString:@"SEND"]) {
         return NXStompFrameCommandSend;
+        
     } else if ([commandString isEqualToString:@"ERROR"]) {
         return NXStompFrameCommandError;
+        
+    } else if ([commandString isEqualToString:@"RECEIPT"]) {
+        return NXStompFrameCommandReceipt;
+        
     } else if ([commandString isEqualToString:@"CONNECT"]) {
         return NXStompFrameCommandConnect;
+        
     } else if ([commandString isEqualToString:@"CONNECTED"]) {
         return NXStompFrameCommandConnected;
+        
+    } else if ([commandString isEqualToString:@"DISCONNECT"]) {
+        return NXStompFrameCommandDisconnect;
+        
     } else {
         return NXStompFrameCommandUnknown;
     }
 }
+
+#pragma mark - Private - Frame Conversion
 
 - (NSData *)serializeFrame:(NXStompFrame *)frame {
 
@@ -237,6 +333,15 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
     }
         
     return nil;
+}
+
+#pragma mark - Lazy Instantiation
+
+- (NSMutableDictionary *)receiptHandlers {
+    if (_receiptHandlers == nil) {
+        _receiptHandlers = [[NSMutableDictionary alloc] init];
+    }
+    return _receiptHandlers;
 }
 
 @end

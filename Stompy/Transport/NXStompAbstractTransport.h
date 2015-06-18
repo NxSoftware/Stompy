@@ -12,7 +12,8 @@
 
 @protocol NXStompTransportDelegate <NSObject>
 
-- (void)transportDidConnect:(NXStompAbstractTransport *)transport;
+- (void)transportDidOpen:(NXStompAbstractTransport *)transport;
+- (void)transportDidClose:(NXStompAbstractTransport *)transport;
 
 - (void)transport:(NXStompAbstractTransport *)transport didReceiveMessage:(NSString *)message;
 
@@ -24,7 +25,8 @@
 
 - (NSString *)host;
 
-- (void)connect;
+- (void)open;
+- (void)close;
 
 - (void)sendData:(NSData *)data;
 

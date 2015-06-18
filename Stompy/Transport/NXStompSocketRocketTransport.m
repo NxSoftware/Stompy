@@ -34,8 +34,12 @@
     return self.socket.url.host;
 }
 
-- (void)connect {
+- (void)open {
     [self.socket open];
+}
+
+- (void)close {
+    [self.socket close];
 }
 
 - (void)sendData:(NSData *)data {
@@ -45,18 +49,18 @@
 #pragma mark - Socket Rocket Delegate
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
-    [self.delegate transportDidConnect:self];
+    [self.delegate transportDidOpen:self];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket
  didCloseWithCode:(NSInteger)code
            reason:(NSString *)reason
          wasClean:(BOOL)wasClean {
-    NSLog(@"%@", reason);
+    [self.delegate transportDidClose:self];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    NSLog(@"%@", error);
+    NSLog(@"socket failedWithError: %@", error);
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {

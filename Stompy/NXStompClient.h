@@ -34,4 +34,6 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
 
 - (void)connect;
 
+- (void)disconnect;
+
 @end

@@ -14,7 +14,10 @@
     return nil;
 }
 
-- (void)connect {
+- (void)open {
+}
+
+- (void)close {
 }
 
 @end

@@ -11,11 +11,13 @@
 // Frame commands
 typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
     NXStompFrameCommandUnknown,
-    NXStompFrameCommandConnect,
-    NXStompFrameCommandConnected, // incoming only
-    NXStompFrameCommandSend,
-    NXStompFrameCommandMessage, // incoming only?
-    NXStompFrameCommandError, // incoming only?
+    NXStompFrameCommandConnect,     // out
+    NXStompFrameCommandConnected,   // in
+    NXStompFrameCommandDisconnect,  // out
+    NXStompFrameCommandSend,        // out
+    NXStompFrameCommandMessage,     // in
+    NXStompFrameCommandError,       // in
+    NXStompFrameCommandReceipt,     // in
 };
 
 @interface NXStompFrame : NSObject
@@ -34,6 +36,11 @@ typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
  * Sets the header with the provided value
  */
 - (void)setHeader:(NSString *)header value:(NSString *)value;
+
+/**
+ * Retrieves the value of the provided header, or nil if the header does not exist.
+ */
+- (NSString *)valueForHeader:(NSString *)header;
 
 /**
  * Retrieves all headers
