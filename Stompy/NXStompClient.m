@@ -87,10 +87,10 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
     NSMutableArray *acceptVersions = [[NSMutableArray alloc] initWithCapacity:2];
     
     if (self.supportedVersions & NXStompVersion1_1) {
-        [acceptVersions addObject:@"1.2"];
+        [acceptVersions addObject:@"1.1"];
     }
     if (self.supportedVersions & NXStompVersion1_2) {
-        [acceptVersions addObject:@"1.3"];
+        [acceptVersions addObject:@"1.2"];
     }
     
     if ([acceptVersions count]) {
@@ -130,7 +130,6 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
                                                                                    userInfo:nil]];
         }
     }
-    
 }
 
 #pragma mark - Private
