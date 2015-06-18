@@ -8,9 +8,6 @@
 
 #import "NXStompFrame.h"
 
-// Headers
-NSString * const NXStompHeaderContentLength = @"content-length";
-
 @interface NXStompFrame ()
 @property (nonatomic, assign) NXStompFrameCommand command;
 @property (nonatomic, strong) NSMutableDictionary *headers;
@@ -61,18 +58,17 @@ NSString * const NXStompHeaderContentLength = @"content-length";
 }
 
 - (NSString *)valueForHeader:(NSString *)header {
-    return self.headers[header];
+    return _headers[header];
 }
 
 - (NSDictionary *)allHeaders {
-    return [self.headers copy];
+    return [_headers copy];
 }
 
 - (void)setBodyString:(NSString *)body {
     if (_mayHaveBody) {
-        self.bodyData = nil;
-        self.bodyString = body;
-        self.headers[NXStompHeaderContentLength] = @(body.length);
+        _bodyData = nil;
+        _bodyString = [body copy];
     } else {
         NSAssert(0, @"This type of frame cannot have a body");
     }
@@ -80,9 +76,8 @@ NSString * const NXStompHeaderContentLength = @"content-length";
 
 - (void)setBodyData:(NSData *)body {
     if (_mayHaveBody) {
-        self.bodyString = nil;
-        self.bodyData = body;
-        self.headers[NXStompHeaderContentLength] = @(body.length);
+        _bodyString = nil;
+        _bodyData = [body copy];
     } else {
         NSAssert(0, @"This type of frame cannot have a body");
     }

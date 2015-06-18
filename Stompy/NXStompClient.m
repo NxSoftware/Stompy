@@ -25,6 +25,8 @@ NSString * const NXStompHeaderAcceptVersion = @"accept-version";
 NSString * const NXStompHeaderVersion       = @"version";
 NSString * const NXStompHeaderHost          = @"host";
 NSString * const NXStompHeaderReceipt       = @"receipt";
+NSString * const NXStompHeaderDestination   = @"destination";
+NSString * const NXStompHeaderContentLength = @"content-length";
 
 // Supported/accepted versions
 typedef NS_ENUM(NSUInteger, NXStompVersion) {
@@ -97,6 +99,63 @@ typedef void(^NXStompReceiptHandler)();
     [self sendFrame:frame withReceiptHandler:^{
         [weakSelf forceDisconnect];
     }];
+}
+
+- (void)sendMessage:(NSString *)message
+      toDestination:(NSString *)destination {
+    [self sendMessage:message
+        toDestination:destination
+    withCustomHeaders:nil];
+}
+
+- (void)sendMessage:(NSString *)message
+      toDestination:(NSString *)destination
+  withCustomHeaders:(NSDictionary *)headers {
+    [self sendMessageData:[message dataUsingEncoding:NSUTF8StringEncoding]
+            toDestination:destination
+        withCustomHeaders:headers];
+}
+
+- (void)sendMessageData:(NSData *)messageData
+          toDestination:(NSString *)destination {
+    [self sendMessageData:messageData
+            toDestination:destination
+        withCustomHeaders:nil];
+}
+
+- (void)sendMessageData:(NSData *)messageData
+          toDestination:(NSString *)destination
+      withCustomHeaders:(NSDictionary *)headers {
+
+    __block BOOL invalidHeaders = NO;
+
+    __block NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandSend];
+    
+    // Add the user defined headers, ensuring they are comprised only of strings
+    [headers enumerateKeysAndObjectsUsingBlock:^(id header, id value, BOOL *stop) {
+        if ([header isKindOfClass:[NSString class]]
+        && [value isKindOfClass:[NSString class]]) {
+            
+            [frame setHeader:header value:value];
+            
+        } else {
+            NSAssert(0, @"Custom headers (and their values) must be strings.");
+            *stop = YES;
+            invalidHeaders = YES;
+        }
+    }];
+    
+    // Needed if NS_BLOCK_ASSERTIONS is enabled
+    if (invalidHeaders) {
+        return;
+    }
+    
+    [frame setHeader:NXStompHeaderDestination value:destination];
+    [frame setHeader:NXStompHeaderContentLength
+               value:[NSString stringWithFormat:@"%ld", messageData.length]];
+    [frame setBodyData:messageData];
+    
+    [self sendFrame:frame];
 }
 
 #pragma mark - Transport Delegate

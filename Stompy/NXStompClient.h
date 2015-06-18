@@ -36,4 +36,46 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
 
 - (void)disconnect;
 
+#pragma mark - Sending messages
+
+/**
+ *  Sends a message to the provided destination.
+ *
+ *  @param message     The message to be sent.
+ *  @param destination Where to send the message.
+ */
+- (void)sendMessage:(NSString *)message
+      toDestination:(NSString *)destination;
+
+/**
+ *  Sends a message to the provided destination.
+ *
+ *  @param message     The message to be sent.
+ *  @param destination Where to send the message.
+ *  @param headers     User-defined headers as a dictionary of NSString : NSString objects.
+ */
+- (void)sendMessage:(NSString *)message
+      toDestination:(NSString *)destination
+  withCustomHeaders:(NSDictionary *)headers;
+
+/**
+ *  Sends a message to the provided destination.
+ *
+ *  @param message     The message to be sent.
+ *  @param destination Where to send the message.
+ */
+- (void)sendMessageData:(NSData *)messageData
+          toDestination:(NSString *)destination;
+
+/**
+ *  Sends a message to the provided destination.
+ *
+ *  @param message     The message to be sent.
+ *  @param destination Where to send the message.
+ *  @param headers     User-defined headers as a dictionary of NSString : NSString objects.
+ */
+- (void)sendMessageData:(NSData *)messageData
+          toDestination:(NSString *)destination
+      withCustomHeaders:(NSDictionary *)headers;
+
 @end
