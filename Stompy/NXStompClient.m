@@ -189,7 +189,9 @@ typedef void(^NXStompReceiptHandler)();
     _receiptCounter = 0;
     
     self.state = NXStompStateDisconnected;
-    [self.delegate stompClient:self didDisconnectWithError:nil];
+    if ([self.delegate respondsToSelector:@selector(stompClient:didDisconnectWithError:)]) {
+        [self.delegate stompClient:self didDisconnectWithError:nil];
+    }
 }
 
 - (void)transport:(NXStompAbstractTransport *)transport didReceiveMessage:(NSString *)message {
@@ -206,9 +208,11 @@ typedef void(^NXStompReceiptHandler)();
         // or an ERROR
         else if (frame.command == NXStompFrameCommandError) {
             self.state = NXStompStateDisconnected;
-            [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:NXStompErrorDomain
-                                                                                       code:NXStompConnectionError
-                                                                                   userInfo:nil]];
+            if ([self.delegate respondsToSelector:@selector(stompClient:didDisconnectWithError:)]) {
+                [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:NXStompErrorDomain
+                                                                                           code:NXStompConnectionError
+                                                                                       userInfo:nil]];
+            }
         }
     }
     
