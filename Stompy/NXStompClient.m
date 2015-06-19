@@ -159,7 +159,7 @@ typedef void(^NXStompReceiptHandler)();
     [frame setHeader:NXStompHeaderDestination value:destination];
     [frame setHeader:NXStompHeaderContentLength
                value:[NSString stringWithFormat:@"%ld", messageData.length]];
-    [frame setBodyData:messageData];
+    [frame setBody:messageData];
     
     [self sendFrame:frame];
 }
@@ -225,9 +225,7 @@ typedef void(^NXStompReceiptHandler)();
     _receiptCounter = 0;
     
     self.state = NXStompStateDisconnected;
-    if ([self.delegate respondsToSelector:@selector(stompClient:didDisconnectWithError:)]) {
-        [self.delegate stompClient:self didDisconnectWithError:nil];
-    }
+    [self.delegate stompClient:self didDisconnectWithError:nil];
 }
 
 - (void)transport:(NXStompAbstractTransport *)transport didReceiveMessage:(NSString *)message {
@@ -244,16 +242,21 @@ typedef void(^NXStompReceiptHandler)();
         // or an ERROR
         else if (frame.command == NXStompFrameCommandError) {
             self.state = NXStompStateDisconnected;
-            if ([self.delegate respondsToSelector:@selector(stompClient:didDisconnectWithError:)]) {
-                [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:NXStompErrorDomain
-                                                                                           code:NXStompConnectionError
-                                                                                       userInfo:nil]];
-            }
+            [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:NXStompErrorDomain
+                                                                                       code:NXStompConnectionError
+                                                                                   userInfo:nil]];
         }
+        
+        // Do no further message processing
+        return;
     }
     
+    // Handle regular messages
+    if (frame.command == NXStompFrameCommandMessage) {
+        [self handleMessageFrame:frame];
+    }
     // Handle receipt frames
-    if (frame.command == NXStompFrameCommandReceipt) {
+    else if (frame.command == NXStompFrameCommandReceipt) {
         NSString *receipt = [frame valueForHeader:NXStompHeaderReceipt];
         NXStompReceiptHandler handler = _receiptHandlers[receipt];
         if (handler) {
@@ -312,6 +315,28 @@ typedef void(^NXStompReceiptHandler)();
     
     self.state = NXStompStateConnected;
     [self.delegate stompClientDidConnect:self];
+}
+
+- (void)handleMessageFrame:(NXStompFrame *)frame {
+    
+    // Data version of delegate method takes precendence
+    if ([self.delegate respondsToSelector:@selector(stompClient:receivedMessageData:withHeaders:)]) {
+        
+        [self.delegate stompClient:self
+               receivedMessageData:[frame body]
+                       withHeaders:[frame allHeaders]];
+        
+    }
+    // Fall back to the string-based delegate method
+    else if ([self.delegate respondsToSelector:@selector(stompClient:receivedMessage:withHeaders:)]) {
+        
+        NSString *message = [[NSString alloc] initWithData:frame.body
+                                                  encoding:NSUTF8StringEncoding];
+        [self.delegate stompClient:self
+                   receivedMessage:message
+                       withHeaders:[frame allHeaders]];
+        
+    }
 }
 
 #pragma mark - Private - Utilities
@@ -410,11 +435,9 @@ typedef void(^NXStompReceiptHandler)();
     // End the headers with an additional newline
     [data appendData:newline];
     
-    // Append the body data or string
-    if ([frame bodyData]) {
-        [data appendData:[frame bodyData]];
-    } else if ([frame bodyString]) {
-        [data appendData:[[frame bodyString] dataUsingEncoding:NSUTF8StringEncoding]];
+    // Append the body data
+    if (frame.body) {
+        [data appendData:frame.body];
     }
     
     // End the frame with a NULL byte
@@ -456,7 +479,23 @@ typedef void(^NXStompReceiptHandler)();
                 }
             }
             
-            // TODO: Body
+            // Parse the body
+            if (frame.mayHaveBody) {
+                if ([lines.lastObject isKindOfClass:[NSString class]]) {
+                    
+                    // TODO: Read exactly header[content-length]
+                    // NOTE: Dealing with UTF-8 strings will render this
+                    // impossible if NULLs are present within the body.
+                    // Will likely need to use NSData throughout.
+                    
+                    NSData *body = [lines.lastObject dataUsingEncoding:NSUTF8StringEncoding];
+                    
+                    // The body will include the trailing NULL
+                    frame.body = [body subdataWithRange:NSMakeRange(0, body.length - 1)];
+                } else {
+                    NSAssert(0, @"Unexpected frame body type: %@", [lines.lastObject class]);
+                }
+            }
             
             return frame;
         }

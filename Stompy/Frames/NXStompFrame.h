@@ -25,6 +25,11 @@ typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
 @interface NXStompFrame : NSObject
 
 /**
+ *  Indicates whether or not the receiving frame may have a body.
+ */
+@property (nonatomic, assign, readonly) BOOL mayHaveBody;
+
+/**
  * Initialises a STOMP frame for the specified command
  */
 - (instancetype)initWithCommand:(NXStompFrameCommand)command NS_DESIGNATED_INITIALIZER;
@@ -50,23 +55,13 @@ typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
 - (NSDictionary *)allHeaders;
 
 /**
- * Sets the body of the receiving frame with the provided string
- */
-- (void)setBodyString:(NSString *)body;
-
-/**
- * Retrieves the body as a string, nil if no body or body is data.
- */
-- (NSString *)bodyString;
-
-/**
  * Sets the body of the receiving frame with the provided data
  */
-- (void)setBodyData:(NSData *)body;
+- (void)setBody:(NSData *)body;
 
 /**
- * Retrieves the body as data, nil if no body or body is a string.
+ * Retrieves the body, nil if no body.
  */
-- (NSData *)bodyData;
+- (NSData *)body;
 
 @end

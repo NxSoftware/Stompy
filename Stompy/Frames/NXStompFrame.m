@@ -13,8 +13,7 @@
 @property (nonatomic, strong) NSMutableDictionary *headers;
 
 @property (nonatomic, assign) BOOL mayHaveBody;
-@property (nonatomic, copy) NSString *bodyString;
-@property (nonatomic, copy) NSData *bodyData;
+@property (nonatomic, copy) NSData *body;
 
 @end
 
@@ -65,19 +64,9 @@
     return [_headers copy];
 }
 
-- (void)setBodyString:(NSString *)body {
+- (void)setBody:(NSData *)body {
     if (_mayHaveBody) {
-        _bodyData = nil;
-        _bodyString = [body copy];
-    } else {
-        NSAssert(0, @"This type of frame cannot have a body");
-    }
-}
-
-- (void)setBodyData:(NSData *)body {
-    if (_mayHaveBody) {
-        _bodyString = nil;
-        _bodyData = [body copy];
+        _body = [body copy];
     } else {
         NSAssert(0, @"This type of frame cannot have a body");
     }

@@ -19,8 +19,45 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
 @protocol NXStompClientDelegate <NSObject>
 - (void)stompClientDidConnect:(NXStompClient *)stompClient;
 
-@optional
 - (void)stompClient:(NXStompClient *)stompClient didDisconnectWithError:(NSError *)error;
+
+@optional
+
+/**
+ *  A message has been received from the STOMP server.
+ *
+ *  The delegate should implement either
+ *  this method, or the alternative:-
+ *  stompClient:receivedMessageData:withHeaders
+ *
+ *  This method will NOT be called if both
+ *  have been implemented.
+ *
+ *  @param stompClient The STOMP client.
+ *  @param message     The body of the received message.
+ *  @param headers     The headers of the received message.
+ */
+- (void)stompClient:(NXStompClient *)stompClient
+    receivedMessage:(NSString *)message
+        withHeaders:(NSDictionary *)headers;
+
+/**
+ *  A message has been received from the STOMP server.
+ *
+ *  The delegate should implement either
+ *  this method, or the alternative:-
+ *  stompClient:receivedMessage:withHeaders
+ *
+ *  This method will take precendence if both
+ *  have been implemented.
+ *
+ *  @param stompClient The STOMP client.
+ *  @param messageData The body of the received message.
+ *  @param headers     The headers of the received message.
+ */
+- (void)stompClient:(NXStompClient *)stompClient
+receivedMessageData:(NSData *)messageData
+        withHeaders:(NSDictionary *)headers;
 
 @end
 
