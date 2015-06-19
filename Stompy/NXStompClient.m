@@ -222,6 +222,7 @@ typedef void(^NXStompReceiptHandler)();
         NXStompReceiptHandler handler = _receiptHandlers[receipt];
         if (handler) {
             handler();
+            [_receiptHandlers removeObjectForKey:receipt];
         }
     }
 }
