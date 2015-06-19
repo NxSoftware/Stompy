@@ -15,6 +15,8 @@ typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
     NXStompFrameCommandConnected,   // in
     NXStompFrameCommandDisconnect,  // out
     NXStompFrameCommandSend,        // out
+    NXStompFrameCommandSubscribe,   // out
+    NXStompFrameCommandUnsubscribe, // out
     NXStompFrameCommandMessage,     // in
     NXStompFrameCommandError,       // in
     NXStompFrameCommandReceipt,     // in

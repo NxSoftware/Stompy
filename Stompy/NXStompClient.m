@@ -9,6 +9,7 @@
 #import "NXStompClient.h"
 #import "NXStompAbstractTransport.h"
 #import "NXStompFrame.h"
+#import "NXStompSubscription.h"
 
 #define NXSTOMPDEBUG 1
 
@@ -27,6 +28,7 @@ NSString * const NXStompHeaderHost          = @"host";
 NSString * const NXStompHeaderReceipt       = @"receipt";
 NSString * const NXStompHeaderDestination   = @"destination";
 NSString * const NXStompHeaderContentLength = @"content-length";
+NSString * const NXStompHeaderID            = @"id";
 
 // Supported/accepted versions
 typedef NS_ENUM(NSUInteger, NXStompVersion) {
@@ -83,7 +85,7 @@ typedef void(^NXStompReceiptHandler)();
     return client;
 }
 
-#pragma mark - Public
+#pragma mark - Public - Connection
 
 - (void)connect {
     self.state = NXStompStateConnecting;
@@ -100,6 +102,8 @@ typedef void(^NXStompReceiptHandler)();
         [weakSelf forceDisconnect];
     }];
 }
+
+#pragma mark - Public - Sending Messages
 
 - (void)sendMessage:(NSString *)message
       toDestination:(NSString *)destination {
@@ -154,6 +158,36 @@ typedef void(^NXStompReceiptHandler)();
     [frame setHeader:NXStompHeaderContentLength
                value:[NSString stringWithFormat:@"%ld", messageData.length]];
     [frame setBodyData:messageData];
+    
+    [self sendFrame:frame];
+}
+
+#pragma mark - Public - Subscriptions
+
+- (id)subscribe:(NSString *)destination {
+    
+    NSString *identifier = [[NSUUID UUID] UUIDString];
+    
+    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandSubscribe];
+    [frame setHeader:NXStompHeaderDestination value:destination];
+    [frame setHeader:NXStompHeaderID value:identifier];
+    
+    [self sendFrame:frame];
+    
+    return [[NXStompSubscription alloc] initWithIdentifier:identifier];
+}
+
+- (void)unsubscribe:(id)subscription {
+    // Protection
+    if ([subscription isKindOfClass:[NXStompSubscription class]] == NO) {
+        NSAssert(0, @"You must provide an NXStompSubscription object.");
+        return;
+    }
+    
+    NSString *identifier = [(NXStompSubscription *)subscription identifier];
+    
+    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandUnsubscribe];
+    [frame setHeader:NXStompHeaderID value:identifier];
     
     [self sendFrame:frame];
 }
@@ -288,6 +322,12 @@ typedef void(^NXStompReceiptHandler)();
         case NXStompFrameCommandSend:
             return @"SEND";
             
+        case NXStompFrameCommandSubscribe:
+            return @"SUBSCRIBE";
+            
+        case NXStompFrameCommandUnsubscribe:
+            return @"UNSUBSCRIBE";
+            
         case NXStompFrameCommandError:
             return @"ERROR";
             
@@ -314,6 +354,12 @@ typedef void(^NXStompReceiptHandler)();
         
     } else if ([commandString isEqualToString:@"SEND"]) {
         return NXStompFrameCommandSend;
+        
+    } else if ([commandString isEqualToString:@"SUBSCRIBE"]) {
+        return NXStompFrameCommandSubscribe;
+        
+    } else if ([commandString isEqualToString:@"UNSUBSCRIBE"]) {
+        return NXStompFrameCommandUnsubscribe;
         
     } else if ([commandString isEqualToString:@"ERROR"]) {
         return NXStompFrameCommandError;
