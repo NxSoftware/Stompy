@@ -17,8 +17,20 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
 };
 
 @protocol NXStompClientDelegate <NSObject>
+
+/**
+ *  The STOMP client successfully established a connection with the server.
+ *
+ *  @param stompClient The STOMP client.
+ */
 - (void)stompClientDidConnect:(NXStompClient *)stompClient;
 
+/**
+ *  The connection to the STOMP server has ended.
+ *
+ *  @param stompClient The STOMP client.
+ *  @param error       An error detailing why the connection ended, or nil if it the disconnection was expected.
+ */
 - (void)stompClient:(NXStompClient *)stompClient didDisconnectWithError:(NSError *)error;
 
 @optional
@@ -67,6 +79,13 @@ receivedMessageData:(NSData *)messageData
 
 @property (nonatomic, weak) id<NXStompClientDelegate> delegate;
 
+/**
+ *  Creates a new STOMP client that will connect over the provided transport.
+ *
+ *  @param transport A transport adapter that will handle the sending & receiving of data.
+ *
+ *  @return A new NXStompClient instance
+ */
 + (instancetype)stompWithTransport:(NXStompAbstractTransport *)transport;
 
 - (void)connect;
@@ -97,6 +116,9 @@ receivedMessageData:(NSData *)messageData
 
 /**
  *  Sends a message to the provided destination.
+ *  The data versions of sendMessage... are intended as helper
+ *  methods for sending JSON or base64 data. They
+ *  should not be used to send non-UTF8 encoded data.
  *
  *  @param message     The message to be sent. The data must represent a UTF8 encoded string.
  *  @param destination Where to send the message.
@@ -106,6 +128,9 @@ receivedMessageData:(NSData *)messageData
 
 /**
  *  Sends a message to the provided destination.
+ *  The data versions of sendMessage... are intended as helper
+ *  methods for sending JSON or base64 data. They
+ *  should not be used to send non-UTF8 encoded data.
  *
  *  @param message     The message to be sent. The data must represent a UTF8 encoded string.
  *  @param destination Where to send the message.
