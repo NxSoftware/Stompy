@@ -30,8 +30,13 @@
     self.subscribeButton.enabled = NO;
     self.unsubscribeButton.enabled = NO;
     
-    NSURL *webSocketURL = [NSURL URLWithString:@"http://localhost:8080/ws/websocket"];
-    NXStompSocketRocketTransport *transport = [NXStompSocketRocketTransport transportWithURL:webSocketURL];
+//    NSURL *webSocketURL = [NSURL URLWithString:@"http://localhost:8080/ws/websocket"];
+//    NXStompSocketRocketTransport *transport = [NXStompSocketRocketTransport transportWithURL:webSocketURL];
+
+    NXStompGCDAsyncSocketTransport *transport = [NXStompGCDAsyncSocketTransport transportWithHost:@"localhost"
+                                                                                             port:61613
+                                                                                connectionTimeout:10];
+    
     self.stomp = [NXStompClient stompWithTransport:transport];
     self.stomp.delegate = self;
 }

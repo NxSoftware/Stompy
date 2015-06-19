@@ -17,8 +17,12 @@
 		65C91ED21B318ADB000EA301 /* Stompy.h in Headers */ = {isa = PBXBuildFile; fileRef = 65C91ED11B318ADB000EA301 /* Stompy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65C91ED81B318ADB000EA301 /* Stompy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C91ECC1B318ADB000EA301 /* Stompy.framework */; };
 		65C91EDF1B318ADB000EA301 /* StompyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C91EDE1B318ADB000EA301 /* StompyTests.m */; };
+		AA6A87521B34BE3C007F755E /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AA6A874D1B34BE3C007F755E /* GCDAsyncSocket.h */; };
+		AA6A87531B34BE3C007F755E /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6A874E1B34BE3C007F755E /* GCDAsyncSocket.m */; };
 		AA6A87541B34BE3C007F755E /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AA6A87501B34BE3C007F755E /* SRWebSocket.h */; };
 		AA6A87551B34BE3C007F755E /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6A87511B34BE3C007F755E /* SRWebSocket.m */; };
+		AA6A87581B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = AA6A87561B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA6A87591B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6A87571B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.m */; };
 		AA6A875B1B34BF74007F755E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6A875A1B34BF74007F755E /* libicucore.dylib */; };
 		AAC004B21B34720D0057FC03 /* NXStompSubscription.h in Headers */ = {isa = PBXBuildFile; fileRef = AAC004B01B34720D0057FC03 /* NXStompSubscription.h */; };
 		AAC004B31B34720D0057FC03 /* NXStompSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC004B11B34720D0057FC03 /* NXStompSubscription.m */; };
@@ -48,8 +52,12 @@
 		65C91ED71B318ADB000EA301 /* StompyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StompyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		65C91EDD1B318ADB000EA301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65C91EDE1B318ADB000EA301 /* StompyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StompyTests.m; sourceTree = "<group>"; };
+		AA6A874D1B34BE3C007F755E /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		AA6A874E1B34BE3C007F755E /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		AA6A87501B34BE3C007F755E /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
 		AA6A87511B34BE3C007F755E /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		AA6A87561B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompGCDAsyncSocketTransport.h; sourceTree = "<group>"; };
+		AA6A87571B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompGCDAsyncSocketTransport.m; sourceTree = "<group>"; };
 		AA6A875A1B34BF74007F755E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		AAC004B01B34720D0057FC03 /* NXStompSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompSubscription.h; sourceTree = "<group>"; };
 		AAC004B11B34720D0057FC03 /* NXStompSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompSubscription.m; sourceTree = "<group>"; };
@@ -90,6 +98,8 @@
 				65355EA71B31B1AB00A0B96B /* NXStompTransportAdapter.h */,
 				65355EA91B31B1AB00A0B96B /* NXStompSocketRocketTransport.h */,
 				65355EAA1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m */,
+				AA6A87561B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.h */,
+				AA6A87571B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.m */,
 			);
 			path = Transport;
 			sourceTree = "<group>";
@@ -157,9 +167,19 @@
 		AA6A874B1B34BE3C007F755E /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
+				AA6A874C1B34BE3C007F755E /* GCDAsyncSocket */,
 				AA6A874F1B34BE3C007F755E /* SocketRocket */,
 			);
 			path = "Third Party";
+			sourceTree = "<group>";
+		};
+		AA6A874C1B34BE3C007F755E /* GCDAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				AA6A874D1B34BE3C007F755E /* GCDAsyncSocket.h */,
+				AA6A874E1B34BE3C007F755E /* GCDAsyncSocket.m */,
+			);
+			path = GCDAsyncSocket;
 			sourceTree = "<group>";
 		};
 		AA6A874F1B34BE3C007F755E /* SocketRocket */ = {
@@ -181,7 +201,9 @@
 				65355E7F1B318BB300A0B96B /* NXStompClient.h in Headers */,
 				AAC004B21B34720D0057FC03 /* NXStompSubscription.h in Headers */,
 				65C91ED21B318ADB000EA301 /* Stompy.h in Headers */,
+				AA6A87581B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.h in Headers */,
 				65355EAB1B31B1AB00A0B96B /* NXStompTransportAdapter.h in Headers */,
+				AA6A87521B34BE3C007F755E /* GCDAsyncSocket.h in Headers */,
 				65355EAD1B31B1AB00A0B96B /* NXStompSocketRocketTransport.h in Headers */,
 				65355EA41B31B19700A0B96B /* NXStompFrame.h in Headers */,
 				AA6A87541B34BE3C007F755E /* SRWebSocket.h in Headers */,
@@ -284,8 +306,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA6A87531B34BE3C007F755E /* GCDAsyncSocket.m in Sources */,
 				65355EA51B31B19700A0B96B /* NXStompFrame.m in Sources */,
 				65355E801B318BB300A0B96B /* NXStompClient.m in Sources */,
+				AA6A87591B34BE5D007F755E /* NXStompGCDAsyncSocketTransport.m in Sources */,
 				AA6A87551B34BE3C007F755E /* SRWebSocket.m in Sources */,
 				AAC004B31B34720D0057FC03 /* NXStompSubscription.m in Sources */,
 				65355EAE1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m in Sources */,

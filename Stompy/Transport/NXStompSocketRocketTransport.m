@@ -29,7 +29,7 @@
     return self;
 }
 
-#pragma mark - Transport Overrides
+#pragma mark - Transport Methods
 
 - (NSString *)host {
     return self.socket.url.host;

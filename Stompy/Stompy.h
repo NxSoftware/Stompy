@@ -9,5 +9,6 @@
 #import "NXStompClient.h"
 
 
-// TODO: Refactor this into it's own framework
+// TODO: Refactor these into their own framework
 #import "NXStompSocketRocketTransport.h"
+#import "NXStompGCDAsyncSocketTransport.h"
