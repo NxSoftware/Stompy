@@ -14,7 +14,7 @@
 		AA81D5A11B332E5E00278F13 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA81D5A01B332E5E00278F13 /* Images.xcassets */; };
 		AA81D5A41B332E5E00278F13 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA81D5A21B332E5E00278F13 /* LaunchScreen.xib */; };
 		AA81D5B01B332E5E00278F13 /* StompyExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AA81D5AF1B332E5E00278F13 /* StompyExampleTests.m */; };
-		AA81D5C41B332E7F00278F13 /* Stompy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA81D5BF1B332E6B00278F13 /* Stompy.framework */; };
+		AAC004B61B34722A0057FC03 /* libStompy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AAC004A81B34718B0057FC03 /* libStompy.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,21 +25,21 @@
 			remoteGlobalIDString = AA81D58F1B332E5E00278F13;
 			remoteInfo = StompyExample;
 		};
-		AA81D5BE1B332E6B00278F13 /* PBXContainerItemProxy */ = {
+		AAC004A71B34718B0057FC03 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA81D5B91B332E6B00278F13 /* Stompy.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 65C91ECC1B318ADB000EA301;
+			remoteGlobalIDString = AAC0048E1B3471840057FC03;
 			remoteInfo = Stompy;
 		};
-		AA81D5C01B332E6B00278F13 /* PBXContainerItemProxy */ = {
+		AAC004A91B34718B0057FC03 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA81D5B91B332E6B00278F13 /* Stompy.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 65C91ED71B318ADB000EA301;
+			remoteGlobalIDString = AAC004981B3471840057FC03;
 			remoteInfo = StompyTests;
 		};
-		AA81D5C21B332E7800278F13 /* PBXContainerItemProxy */ = {
+		AAC004B41B3472260057FC03 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA81D5B91B332E6B00278F13 /* Stompy.xcodeproj */;
 			proxyType = 1;
@@ -70,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA81D5C41B332E7F00278F13 /* Stompy.framework in Frameworks */,
+				AAC004B61B34722A0057FC03 /* libStompy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,8 +147,8 @@
 		AA81D5BA1B332E6B00278F13 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA81D5BF1B332E6B00278F13 /* Stompy.framework */,
-				AA81D5C11B332E6B00278F13 /* StompyTests.xctest */,
+				AAC004A81B34718B0057FC03 /* libStompy.a */,
+				AAC004AA1B34718B0057FC03 /* StompyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,7 +167,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				AA81D5C31B332E7800278F13 /* PBXTargetDependency */,
+				AAC004B51B3472260057FC03 /* PBXTargetDependency */,
 			);
 			name = StompyExample;
 			productName = StompyExample;
@@ -236,18 +236,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		AA81D5BF1B332E6B00278F13 /* Stompy.framework */ = {
+		AAC004A81B34718B0057FC03 /* libStompy.a */ = {
 			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Stompy.framework;
-			remoteRef = AA81D5BE1B332E6B00278F13 /* PBXContainerItemProxy */;
+			fileType = archive.ar;
+			path = libStompy.a;
+			remoteRef = AAC004A71B34718B0057FC03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		AA81D5C11B332E6B00278F13 /* StompyTests.xctest */ = {
+		AAC004AA1B34718B0057FC03 /* StompyTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = StompyTests.xctest;
-			remoteRef = AA81D5C01B332E6B00278F13 /* PBXContainerItemProxy */;
+			remoteRef = AAC004A91B34718B0057FC03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -299,10 +299,10 @@
 			target = AA81D58F1B332E5E00278F13 /* StompyExample */;
 			targetProxy = AA81D5AA1B332E5E00278F13 /* PBXContainerItemProxy */;
 		};
-		AA81D5C31B332E7800278F13 /* PBXTargetDependency */ = {
+		AAC004B51B3472260057FC03 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Stompy;
-			targetProxy = AA81D5C21B332E7800278F13 /* PBXContainerItemProxy */;
+			targetProxy = AAC004B41B3472260057FC03 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -489,6 +489,7 @@
 				AA81D5B51B332E5E00278F13 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AA81D5B61B332E5E00278F13 /* Build configuration list for PBXNativeTarget "StompyExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -497,6 +498,7 @@
 				AA81D5B81B332E5E00278F13 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
