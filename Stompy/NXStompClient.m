@@ -87,6 +87,8 @@ typedef void(^NXStompReceiptHandler)();
 
 #pragma mark - Public - Connection
 
+// TODO: login & passcode support
+// http://stomp.github.io/stomp-specification-1.2.html#CONNECT_or_STOMP_Frame
 - (void)connect {
     self.state = NXStompStateConnecting;
     [self.transport open];
@@ -396,6 +398,10 @@ typedef void(^NXStompReceiptHandler)();
     // Append the headers, each followed with a newline
     NSDictionary *frameHeaders = [frame allHeaders];
     for (NSString *key in frameHeaders) {
+        
+        // TODO: escape colons
+        // http://stomp.github.io/stomp-specification-1.1.html#Value_Encoding
+        
         NSString *headerLine = [NSString stringWithFormat:@"%@:%@", key, frameHeaders[key]];
         [data appendData:[headerLine dataUsingEncoding:NSUTF8StringEncoding]];
         [data appendData:newline];
@@ -428,6 +434,10 @@ typedef void(^NXStompReceiptHandler)();
             
             // Parse headers
             for (int i=1; i < lines.count; ++i) {
+                
+                // TODO: decode colons
+                // http://stomp.github.io/stomp-specification-1.1.html#Value_Encoding
+                
                 NSString *line = lines[i];
                 NSUInteger indexOfFirstColon = [line rangeOfString:@":"].location;
                 
