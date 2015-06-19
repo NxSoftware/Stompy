@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		65355E7F1B318BB300A0B96B /* NXStompClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355E7D1B318BB300A0B96B /* NXStompClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65355E801B318BB300A0B96B /* NXStompClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355E7E1B318BB300A0B96B /* NXStompClient.m */; };
-		65355E8A1B31A0DA00A0B96B /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355E891B31A0DA00A0B96B /* SRWebSocket.m */; };
-		65355E8C1B31A17600A0B96B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 65355E8B1B31A17600A0B96B /* libicucore.dylib */; };
 		65355EA41B31B19700A0B96B /* NXStompFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA01B31B19700A0B96B /* NXStompFrame.h */; };
 		65355EA51B31B19700A0B96B /* NXStompFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355EA11B31B19700A0B96B /* NXStompFrame.m */; };
 		65355EAB1B31B1AB00A0B96B /* NXStompTransportAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA71B31B1AB00A0B96B /* NXStompTransportAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,6 +17,9 @@
 		65C91ED21B318ADB000EA301 /* Stompy.h in Headers */ = {isa = PBXBuildFile; fileRef = 65C91ED11B318ADB000EA301 /* Stompy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65C91ED81B318ADB000EA301 /* Stompy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C91ECC1B318ADB000EA301 /* Stompy.framework */; };
 		65C91EDF1B318ADB000EA301 /* StompyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C91EDE1B318ADB000EA301 /* StompyTests.m */; };
+		AA6A87541B34BE3C007F755E /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AA6A87501B34BE3C007F755E /* SRWebSocket.h */; };
+		AA6A87551B34BE3C007F755E /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6A87511B34BE3C007F755E /* SRWebSocket.m */; };
+		AA6A875B1B34BF74007F755E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6A875A1B34BF74007F755E /* libicucore.dylib */; };
 		AAC004B21B34720D0057FC03 /* NXStompSubscription.h in Headers */ = {isa = PBXBuildFile; fileRef = AAC004B01B34720D0057FC03 /* NXStompSubscription.h */; };
 		AAC004B31B34720D0057FC03 /* NXStompSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC004B11B34720D0057FC03 /* NXStompSubscription.m */; };
 /* End PBXBuildFile section */
@@ -36,9 +37,6 @@
 /* Begin PBXFileReference section */
 		65355E7D1B318BB300A0B96B /* NXStompClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompClient.h; sourceTree = "<group>"; };
 		65355E7E1B318BB300A0B96B /* NXStompClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompClient.m; sourceTree = "<group>"; };
-		65355E871B31A0C400A0B96B /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		65355E891B31A0DA00A0B96B /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
-		65355E8B1B31A17600A0B96B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		65355EA01B31B19700A0B96B /* NXStompFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompFrame.h; sourceTree = "<group>"; };
 		65355EA11B31B19700A0B96B /* NXStompFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompFrame.m; sourceTree = "<group>"; };
 		65355EA71B31B1AB00A0B96B /* NXStompTransportAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompTransportAdapter.h; sourceTree = "<group>"; };
@@ -50,6 +48,9 @@
 		65C91ED71B318ADB000EA301 /* StompyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StompyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		65C91EDD1B318ADB000EA301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65C91EDE1B318ADB000EA301 /* StompyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StompyTests.m; sourceTree = "<group>"; };
+		AA6A87501B34BE3C007F755E /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		AA6A87511B34BE3C007F755E /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		AA6A875A1B34BF74007F755E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		AAC004B01B34720D0057FC03 /* NXStompSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompSubscription.h; sourceTree = "<group>"; };
 		AAC004B11B34720D0057FC03 /* NXStompSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompSubscription.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65355E8C1B31A17600A0B96B /* libicucore.dylib in Frameworks */,
+				AA6A875B1B34BF74007F755E /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,24 +75,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		65355E851B31A0AE00A0B96B /* Third Party */ = {
-			isa = PBXGroup;
-			children = (
-				65355E861B31A0B400A0B96B /* SocketRocket */,
-			);
-			name = "Third Party";
-			sourceTree = "<group>";
-		};
-		65355E861B31A0B400A0B96B /* SocketRocket */ = {
-			isa = PBXGroup;
-			children = (
-				65355E8B1B31A17600A0B96B /* libicucore.dylib */,
-				65355E871B31A0C400A0B96B /* SRWebSocket.h */,
-				65355E891B31A0DA00A0B96B /* SRWebSocket.m */,
-			);
-			name = SocketRocket;
-			sourceTree = "<group>";
-		};
 		65355E9D1B31B19700A0B96B /* Frames */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +97,7 @@
 		65C91EC21B318ADB000EA301 = {
 			isa = PBXGroup;
 			children = (
+				AA6A875A1B34BF74007F755E /* libicucore.dylib */,
 				65C91ECE1B318ADB000EA301 /* Stompy */,
 				65C91EDB1B318ADB000EA301 /* StompyTests */,
 				65C91ECD1B318ADB000EA301 /* Products */,
@@ -132,7 +116,7 @@
 		65C91ECE1B318ADB000EA301 /* Stompy */ = {
 			isa = PBXGroup;
 			children = (
-				65355E851B31A0AE00A0B96B /* Third Party */,
+				AA6A874B1B34BE3C007F755E /* Third Party */,
 				65355EA61B31B1AB00A0B96B /* Transport */,
 				65355E9D1B31B19700A0B96B /* Frames */,
 				65C91ED11B318ADB000EA301 /* Stompy.h */,
@@ -170,6 +154,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		AA6A874B1B34BE3C007F755E /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				AA6A874F1B34BE3C007F755E /* SocketRocket */,
+			);
+			path = "Third Party";
+			sourceTree = "<group>";
+		};
+		AA6A874F1B34BE3C007F755E /* SocketRocket */ = {
+			isa = PBXGroup;
+			children = (
+				AA6A87501B34BE3C007F755E /* SRWebSocket.h */,
+				AA6A87511B34BE3C007F755E /* SRWebSocket.m */,
+			);
+			path = SocketRocket;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -183,6 +184,7 @@
 				65355EAB1B31B1AB00A0B96B /* NXStompTransportAdapter.h in Headers */,
 				65355EAD1B31B1AB00A0B96B /* NXStompSocketRocketTransport.h in Headers */,
 				65355EA41B31B19700A0B96B /* NXStompFrame.h in Headers */,
+				AA6A87541B34BE3C007F755E /* SRWebSocket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,9 +286,9 @@
 			files = (
 				65355EA51B31B19700A0B96B /* NXStompFrame.m in Sources */,
 				65355E801B318BB300A0B96B /* NXStompClient.m in Sources */,
+				AA6A87551B34BE3C007F755E /* SRWebSocket.m in Sources */,
 				AAC004B31B34720D0057FC03 /* NXStompSubscription.m in Sources */,
 				65355EAE1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m in Sources */,
-				65355E8A1B31A0DA00A0B96B /* SRWebSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
