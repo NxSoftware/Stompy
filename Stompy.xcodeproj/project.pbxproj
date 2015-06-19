@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		65355E7F1B318BB300A0B96B /* NXStompClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355E7D1B318BB300A0B96B /* NXStompClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65355E801B318BB300A0B96B /* NXStompClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355E7E1B318BB300A0B96B /* NXStompClient.m */; };
-		65355E881B31A0C400A0B96B /* SRWebSocket.h in Sources */ = {isa = PBXBuildFile; fileRef = 65355E871B31A0C400A0B96B /* SRWebSocket.h */; };
 		65355E8A1B31A0DA00A0B96B /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355E891B31A0DA00A0B96B /* SRWebSocket.m */; };
 		65355E8C1B31A17600A0B96B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 65355E8B1B31A17600A0B96B /* libicucore.dylib */; };
 		65355EA41B31B19700A0B96B /* NXStompFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA01B31B19700A0B96B /* NXStompFrame.h */; };
@@ -287,7 +286,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				65355EA51B31B19700A0B96B /* NXStompFrame.m in Sources */,
-				65355E881B31A0C400A0B96B /* SRWebSocket.h in Sources */,
 				65355EAC1B31B1AB00A0B96B /* NXStompAbstractTransport.m in Sources */,
 				65355E801B318BB300A0B96B /* NXStompClient.m in Sources */,
 				AAC004B31B34720D0057FC03 /* NXStompSubscription.m in Sources */,
@@ -352,7 +350,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -393,7 +391,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
