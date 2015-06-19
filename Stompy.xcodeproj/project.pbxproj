@@ -13,8 +13,7 @@
 		65355E8C1B31A17600A0B96B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 65355E8B1B31A17600A0B96B /* libicucore.dylib */; };
 		65355EA41B31B19700A0B96B /* NXStompFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA01B31B19700A0B96B /* NXStompFrame.h */; };
 		65355EA51B31B19700A0B96B /* NXStompFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355EA11B31B19700A0B96B /* NXStompFrame.m */; };
-		65355EAB1B31B1AB00A0B96B /* NXStompAbstractTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA71B31B1AB00A0B96B /* NXStompAbstractTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		65355EAC1B31B1AB00A0B96B /* NXStompAbstractTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355EA81B31B1AB00A0B96B /* NXStompAbstractTransport.m */; };
+		65355EAB1B31B1AB00A0B96B /* NXStompTransportAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA71B31B1AB00A0B96B /* NXStompTransportAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65355EAD1B31B1AB00A0B96B /* NXStompSocketRocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 65355EA91B31B1AB00A0B96B /* NXStompSocketRocketTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65355EAE1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 65355EAA1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m */; };
 		65C91ED21B318ADB000EA301 /* Stompy.h in Headers */ = {isa = PBXBuildFile; fileRef = 65C91ED11B318ADB000EA301 /* Stompy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -42,8 +41,7 @@
 		65355E8B1B31A17600A0B96B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		65355EA01B31B19700A0B96B /* NXStompFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompFrame.h; sourceTree = "<group>"; };
 		65355EA11B31B19700A0B96B /* NXStompFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompFrame.m; sourceTree = "<group>"; };
-		65355EA71B31B1AB00A0B96B /* NXStompAbstractTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompAbstractTransport.h; sourceTree = "<group>"; };
-		65355EA81B31B1AB00A0B96B /* NXStompAbstractTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompAbstractTransport.m; sourceTree = "<group>"; };
+		65355EA71B31B1AB00A0B96B /* NXStompTransportAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompTransportAdapter.h; sourceTree = "<group>"; };
 		65355EA91B31B1AB00A0B96B /* NXStompSocketRocketTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NXStompSocketRocketTransport.h; sourceTree = "<group>"; };
 		65355EAA1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NXStompSocketRocketTransport.m; sourceTree = "<group>"; };
 		65C91ECC1B318ADB000EA301 /* Stompy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Stompy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,8 +104,7 @@
 		65355EA61B31B1AB00A0B96B /* Transport */ = {
 			isa = PBXGroup;
 			children = (
-				65355EA71B31B1AB00A0B96B /* NXStompAbstractTransport.h */,
-				65355EA81B31B1AB00A0B96B /* NXStompAbstractTransport.m */,
+				65355EA71B31B1AB00A0B96B /* NXStompTransportAdapter.h */,
 				65355EA91B31B1AB00A0B96B /* NXStompSocketRocketTransport.h */,
 				65355EAA1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m */,
 			);
@@ -183,7 +180,7 @@
 				65355E7F1B318BB300A0B96B /* NXStompClient.h in Headers */,
 				AAC004B21B34720D0057FC03 /* NXStompSubscription.h in Headers */,
 				65C91ED21B318ADB000EA301 /* Stompy.h in Headers */,
-				65355EAB1B31B1AB00A0B96B /* NXStompAbstractTransport.h in Headers */,
+				65355EAB1B31B1AB00A0B96B /* NXStompTransportAdapter.h in Headers */,
 				65355EAD1B31B1AB00A0B96B /* NXStompSocketRocketTransport.h in Headers */,
 				65355EA41B31B19700A0B96B /* NXStompFrame.h in Headers */,
 			);
@@ -286,7 +283,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				65355EA51B31B19700A0B96B /* NXStompFrame.m in Sources */,
-				65355EAC1B31B1AB00A0B96B /* NXStompAbstractTransport.m in Sources */,
 				65355E801B318BB300A0B96B /* NXStompClient.m in Sources */,
 				AAC004B31B34720D0057FC03 /* NXStompSubscription.m in Sources */,
 				65355EAE1B31B1AB00A0B96B /* NXStompSocketRocketTransport.m in Sources */,

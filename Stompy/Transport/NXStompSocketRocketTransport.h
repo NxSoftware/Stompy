@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompAbstractTransport.h"
+#import "NXStompTransportAdapter.h"
 
-@interface NXStompSocketRocketTransport : NXStompAbstractTransport
+@interface NXStompSocketRocketTransport : NSObject <NXStompTransportAdapter>
 
 + (NXStompSocketRocketTransport *)transportWithURL:(NSURL *)URL;
 

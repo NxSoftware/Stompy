@@ -7,7 +7,7 @@
 //
 
 #import "NXStompClient.h"
-#import "NXStompAbstractTransport.h"
+#import "NXStompTransportAdapter.h"
 #import "NXStompFrame.h"
 #import "NXStompSubscription.h"
 
@@ -48,7 +48,7 @@ typedef NS_ENUM(NSUInteger, NXStompState) {
 typedef void(^NXStompReceiptHandler)();
 
 @interface NXStompClient () <NXStompTransportDelegate>
-@property (nonatomic, strong, nonnull) NXStompAbstractTransport *transport;
+@property (nonatomic, strong, nonnull) id<NXStompTransportAdapter> transport;
 @property (nonatomic, copy) NSString *host;
 
 /**
@@ -77,7 +77,7 @@ typedef void(^NXStompReceiptHandler)();
 
 @implementation NXStompClient
 
-+ (instancetype)stompWithTransport:(NXStompAbstractTransport *)transport {
++ (instancetype)stompWithTransport:(id<NXStompTransportAdapter>)transport {
     
     NXStompClient *client = [[self alloc] init];
     client.transport = transport;
@@ -196,7 +196,7 @@ typedef void(^NXStompReceiptHandler)();
 
 #pragma mark - Transport Delegate
 
-- (void)transportDidOpen:(NXStompAbstractTransport *)transport {
+- (void)transportDidOpen:(id<NXStompTransportAdapter>)transport {
     
     // https://stomp.github.io/stomp-specification-1.2.html#CONNECT_or_STOMP_Frame
     // https://stomp.github.io/stomp-specification-1.1.html#CONNECT_or_STOMP_Frame
@@ -218,7 +218,7 @@ typedef void(^NXStompReceiptHandler)();
     [self sendFrame:frame];
 }
 
-- (void)transportDidClose:(NXStompAbstractTransport *)transport {
+- (void)transportDidClose:(id<NXStompTransportAdapter>)transport {
     
     // Wipe out the receipt handlers and reset the counter
     _receiptHandlers = nil;
@@ -228,7 +228,7 @@ typedef void(^NXStompReceiptHandler)();
     [self.delegate stompClient:self didDisconnectWithError:nil];
 }
 
-- (void)transport:(NXStompAbstractTransport *)transport didReceiveMessage:(NSString *)message {
+- (void)transport:(id<NXStompTransportAdapter>)transport didReceiveMessage:(NSString *)message {
     NSLog(@"Received message: %@", message);
     
     NXStompFrame *frame = [self deserializeFrameFromString:message];

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NXStompTransportAdapter.h"
 
 @class NXStompClient;
 
@@ -73,8 +74,6 @@ receivedMessageData:(NSData *)messageData
 
 @end
 
-@class NXStompAbstractTransport;
-
 @interface NXStompClient : NSObject
 
 @property (nonatomic, weak) id<NXStompClientDelegate> delegate;
@@ -86,7 +85,7 @@ receivedMessageData:(NSData *)messageData
  *
  *  @return A new NXStompClient instance
  */
-+ (instancetype)stompWithTransport:(NXStompAbstractTransport *)transport;
++ (instancetype)stompWithTransport:(id<NXStompTransportAdapter>)transport;
 
 - (void)connect;
 

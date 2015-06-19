@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class NXStompAbstractTransport;
+@protocol NXStompTransportAdapter;
 
 @protocol NXStompTransportDelegate <NSObject>
 
-- (void)transportDidOpen:(NXStompAbstractTransport *)transport;
-- (void)transportDidClose:(NXStompAbstractTransport *)transport;
+- (void)transportDidOpen:(id<NXStompTransportAdapter>)transport;
+- (void)transportDidClose:(id<NXStompTransportAdapter>)transport;
 
-- (void)transport:(NXStompAbstractTransport *)transport didReceiveMessage:(NSString *)message;
+- (void)transport:(id<NXStompTransportAdapter>)transport didReceiveMessage:(NSString *)message;
 
 @end
 
-@interface NXStompAbstractTransport : NSObject
+@protocol NXStompTransportAdapter <NSObject>
 
 @property (nonatomic, weak) id<NXStompTransportDelegate> delegate;
 

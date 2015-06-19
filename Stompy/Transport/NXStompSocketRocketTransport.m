@@ -14,6 +14,7 @@
 @end
 
 @implementation NXStompSocketRocketTransport
+@synthesize delegate;
 
 + (NXStompSocketRocketTransport *)transportWithURL:(NSURL *)URL {
     return [[self alloc] initWithURL:URL];
