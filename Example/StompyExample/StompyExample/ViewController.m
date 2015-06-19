@@ -79,6 +79,24 @@
     self.unsubscribeButton.enabled = NO;
 }
 
+- (void)stompClient:(NXStompClient *)stompClient
+receivedMessageData:(NSData *)message
+        withHeaders:(NSDictionary *)headers {
+    NSLog(@"Received message: %@", message);
+    
+    NSError *error = nil;
+    id object = [NSJSONSerialization JSONObjectWithData:message
+                                                options:0
+                                                  error:&error];
+    
+    if (error) {
+        NSLog(@"%@", error);
+    } else {
+        NSLog(@"%@", object);
+    }
+    
+}
+
 - (void)stompClient:(NXStompClient *)stompClient didDisconnectWithError:(NSError *)error {
     NSLog(@"DISCONNECTED %@", error);
     self.connectButton.enabled = YES;
