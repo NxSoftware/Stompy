@@ -412,13 +412,24 @@ typedef void(^NXStompReceiptHandler)();
 
 - (NSData *)serializeFrame:(NXStompFrame *)frame {
 
-    NSData *newline = [@"\x0A" dataUsingEncoding:NSUTF8StringEncoding];
-    NSData *nullByte = [@"\x00" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *eol = nil;
+    // STOMP 1.2 uses carriage return + line feed
+    // http://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames
+    if (self.negotiatedVersion == NXStompVersion1_2) {
+        eol = [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    // STOMP 1.1 uses only line feed
+    // http://stomp.github.io/stomp-specification-1.1.html#STOMP_Frames
+    else if (self.negotiatedVersion == NXStompVersion1_1) {
+        eol = [@"\n" dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    
+    NSData *nullByte = [@"\0" dataUsingEncoding:NSUTF8StringEncoding];
     
     // Start with the command
     NSString *command = [self stringForCommand:frame.command];
     NSMutableData *data = [NSMutableData dataWithData:[command dataUsingEncoding:NSUTF8StringEncoding]];
-    [data appendData:newline];
+    [data appendData:eol];
     
     // Append the headers, each followed with a newline
     NSDictionary *frameHeaders = [frame allHeaders];
@@ -429,11 +440,11 @@ typedef void(^NXStompReceiptHandler)();
         
         NSString *headerLine = [NSString stringWithFormat:@"%@:%@", key, frameHeaders[key]];
         [data appendData:[headerLine dataUsingEncoding:NSUTF8StringEncoding]];
-        [data appendData:newline];
+        [data appendData:eol];
     }
     
     // End the headers with an additional newline
-    [data appendData:newline];
+    [data appendData:eol];
     
     // Append the body data
     if (frame.body) {
