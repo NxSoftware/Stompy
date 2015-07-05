@@ -12,4 +12,6 @@
 
 + (NXStompSocketRocketTransport *)transportWithURL:(NSURL *)URL;
 
++ (NXStompSocketRocketTransport *)transportWithURLRequest:(NSURLRequest *)request;
+
 @end

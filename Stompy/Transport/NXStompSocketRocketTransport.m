@@ -9,8 +9,18 @@
 #import "NXStompSocketRocketTransport.h"
 #import "SRWebSocket.h"
 
+typedef NS_ENUM(NSUInteger, NXSocketRocketErrorCode) {
+    NXSocketRocketErrorCodeUpdgradeFailed = 2133,
+};
+
 @interface NXStompSocketRocketTransport () <SRWebSocketDelegate>
+
+- (instancetype)initWithURLRequest:(NSURLRequest *)request NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithURL:(NSURL *)URL;
+
 @property (nonatomic, strong) SRWebSocket *socket;
+
+@property (nonatomic, copy) NSURLRequest *urlRequest;
 @end
 
 @implementation NXStompSocketRocketTransport
@@ -20,13 +30,33 @@
     return [[self alloc] initWithURL:URL];
 }
 
++ (NXStompSocketRocketTransport *)transportWithURLRequest:(NSURLRequest *)request {
+    return [[self alloc] initWithURLRequest:request];
+}
+
 - (instancetype)initWithURL:(NSURL *)URL {
-    self = [super init];
+    self = [self initWithURLRequest:[NSURLRequest requestWithURL:URL]];
     if (self) {
-        self.socket = [[SRWebSocket alloc] initWithURL:URL];
-        self.socket.delegate = self;
     }
     return self;
+}
+
+- (instancetype)initWithURLRequest:(NSURLRequest *)request {
+    self = [super init];
+    if (self) {
+        _urlRequest = [request copy];
+    }
+    return self;
+}
+
+#pragma mark - Lazy Instantiation
+
+- (SRWebSocket *)socket {
+    if (_socket == nil) {
+        _socket = [[SRWebSocket alloc] initWithURLRequest:self.urlRequest];
+        _socket.delegate = self;
+    }
+    return _socket;
 }
 
 #pragma mark - Transport Methods
@@ -47,6 +77,13 @@
     [self.socket send:data];
 }
 
+#pragma mark - Helpers
+
+- (void)handleSocketClosed {
+    _socket = nil;
+    [self.delegate transportDidClose:self];
+}
+
 #pragma mark - Socket Rocket Delegate
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
@@ -57,11 +94,20 @@
  didCloseWithCode:(NSInteger)code
            reason:(NSString *)reason
          wasClean:(BOOL)wasClean {
-    [self.delegate transportDidClose:self];
+    [self handleSocketClosed];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     NSLog(@"socket failedWithError: %@", error);
+    if ([error.domain isEqualToString:NSPOSIXErrorDomain]) {
+        if (error.code == ECONNREFUSED) {
+            [self handleSocketClosed];
+        }
+    } else if ([error.domain isEqualToString:SRWebSocketErrorDomain]) {
+        if (error.code == NXSocketRocketErrorCodeUpdgradeFailed) {
+            [self handleSocketClosed];
+        }
+    }
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
