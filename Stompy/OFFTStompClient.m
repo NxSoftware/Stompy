@@ -413,14 +413,15 @@ typedef void(^OFFTStompReceiptHandler)();
 - (NSData *)serializeFrame:(OFFTStompFrame *)frame {
 
     NSData *eol = nil;
-    // STOMP 1.2 uses carriage return + line feed
+    // STOMP 1.2 uses OPTIONAL carriage return + REQUIRED line feed
     // http://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames
     if (self.negotiatedVersion == OFFTStompVersion1_2) {
         eol = [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding];
     }
-    // STOMP 1.1 uses only line feed
+    // Older versions use only line feed
     // http://stomp.github.io/stomp-specification-1.1.html#STOMP_Frames
-    else if (self.negotiatedVersion == OFFTStompVersion1_1) {
+    // http://stomp.github.io/stomp-specification-1.0.html
+    else {
         eol = [@"\n" dataUsingEncoding:NSUTF8StringEncoding];
     }
     
