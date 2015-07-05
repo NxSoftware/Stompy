@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "NXStompClient.h"
-#import "NXStompSocketRocketTransport.h"
+#import "OFFTStompClient.h"
+#import "OFFTStompSocketRocketTransport.h"
 #import "SRWebSocket.h"
 
-@interface StompyTests : XCTestCase <NXStompClientDelegate>
+@interface StompyTests : XCTestCase <OFFTStompClientDelegate>
 
-@property (nonatomic, strong) NXStompClient *stomp;
+@property (nonatomic, strong) OFFTStompClient *stomp;
 
 @property (nonatomic, strong) XCTestExpectation *connectionExpectation;
 
@@ -26,8 +26,8 @@
     [super setUp];
 
     NSURL *webSocketURL = [NSURL URLWithString:@"http://localhost:8080/ws/websocket"];
-    NXStompSocketRocketTransport *transport = [NXStompSocketRocketTransport transportWithURL:webSocketURL];
-    self.stomp = [NXStompClient stompWithTransport:transport];
+    OFFTStompSocketRocketTransport *transport = [OFFTStompSocketRocketTransport transportWithURL:webSocketURL];
+    self.stomp = [OFFTStompClient stompWithTransport:transport];
     self.stomp.delegate = self;
 }
 
@@ -49,7 +49,7 @@
 
 #pragma mark - Stomp Client Delegate
 
-- (void)stompClientDidConnect:(NXStompClient *)stompClient {
+- (void)stompClientDidConnect:(OFFTStompClient *)stompClient {
     [self.connectionExpectation fulfill];
 }
 

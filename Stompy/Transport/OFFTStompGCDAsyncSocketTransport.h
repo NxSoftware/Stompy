@@ -1,16 +1,16 @@
 //
-//  NXStompGCDAsyncSocketTransport.h
+//  OFFTStompGCDAsyncSocketTransport.h
 //  Stompy
 //
 //  Created by Steve Wilford on 19/06/2015.
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompTransportAdapter.h"
+#import "OFFTStompTransportAdapter.h"
 
-@interface NXStompGCDAsyncSocketTransport : NSObject <NXStompTransportAdapter>
+@interface OFFTStompGCDAsyncSocketTransport : NSObject <OFFTStompTransportAdapter>
 
-+ (NXStompGCDAsyncSocketTransport *)transportWithHost:(NSString *)host
++ (OFFTStompGCDAsyncSocketTransport *)transportWithHost:(NSString *)host
                                                  port:(uint16_t)port
                                     connectionTimeout:(NSTimeInterval)connectionTimeout;
 

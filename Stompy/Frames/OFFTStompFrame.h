@@ -1,5 +1,5 @@
 //
-//  NXStompFrame.h
+//  OFFTStompFrame.h
 //  Stompy
 //
 //  Created by Steve Wilford on 17/06/2015.
@@ -9,20 +9,20 @@
 #import <Foundation/Foundation.h>
 
 // Frame commands
-typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
-    NXStompFrameCommandUnknown,
-    NXStompFrameCommandConnect,     // out
-    NXStompFrameCommandConnected,   // in
-    NXStompFrameCommandDisconnect,  // out
-    NXStompFrameCommandSend,        // out
-    NXStompFrameCommandSubscribe,   // out
-    NXStompFrameCommandUnsubscribe, // out
-    NXStompFrameCommandMessage,     // in
-    NXStompFrameCommandError,       // in
-    NXStompFrameCommandReceipt,     // in
+typedef NS_ENUM(NSUInteger, OFFTStompFrameCommand) {
+    OFFTStompFrameCommandUnknown,
+    OFFTStompFrameCommandConnect,     // out
+    OFFTStompFrameCommandConnected,   // in
+    OFFTStompFrameCommandDisconnect,  // out
+    OFFTStompFrameCommandSend,        // out
+    OFFTStompFrameCommandSubscribe,   // out
+    OFFTStompFrameCommandUnsubscribe, // out
+    OFFTStompFrameCommandMessage,     // in
+    OFFTStompFrameCommandError,       // in
+    OFFTStompFrameCommandReceipt,     // in
 };
 
-@interface NXStompFrame : NSObject
+@interface OFFTStompFrame : NSObject
 
 /**
  *  Indicates whether or not the receiving frame may have a body.
@@ -32,12 +32,12 @@ typedef NS_ENUM(NSUInteger, NXStompFrameCommand) {
 /**
  * Initialises a STOMP frame for the specified command
  */
-- (instancetype)initWithCommand:(NXStompFrameCommand)command NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCommand:(OFFTStompFrameCommand)command NS_DESIGNATED_INITIALIZER;
 
 /**
  * Retrieves the command.
  */
-- (NXStompFrameCommand)command;
+- (OFFTStompFrameCommand)command;
 
 /**
  * Sets the header with the provided value

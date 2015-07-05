@@ -1,5 +1,5 @@
 //
-//  NXStompSubscription.h
+//  OFFTStompSubscription.h
 //  Stompy
 //
 //  Created by Steve Wilford on 19/06/2015.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NXStompSubscription : NSObject
+@interface OFFTStompSubscription : NSObject
 
 - (instancetype)initWithIdentifier:(NSString *)identifier;
 

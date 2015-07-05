@@ -9,14 +9,14 @@
 #import "ViewController.h"
 #import <Stompy/Stompy.h>
 
-@interface ViewController () <NXStompClientDelegate>
+@interface ViewController () <OFFTStompClientDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *connectButton;
 @property (weak, nonatomic) IBOutlet UIButton *disconnectButton;
 @property (weak, nonatomic) IBOutlet UIButton *subscribeButton;
 @property (weak, nonatomic) IBOutlet UIButton *unsubscribeButton;
 
-@property (nonatomic, strong) NXStompClient *stomp;
+@property (nonatomic, strong) OFFTStompClient *stomp;
 @property (nonatomic, strong) id stompSubscription;
 
 @end
@@ -30,14 +30,19 @@
     self.subscribeButton.enabled = NO;
     self.unsubscribeButton.enabled = NO;
     
-//    NSURL *webSocketURL = [NSURL URLWithString:@"http://localhost:8080/ws/websocket"];
-//    NXStompSocketRocketTransport *transport = [NXStompSocketRocketTransport transportWithURL:webSocketURL];
-
-    NXStompGCDAsyncSocketTransport *transport = [NXStompGCDAsyncSocketTransport transportWithHost:@"localhost"
-                                                                                             port:61613
-                                                                                connectionTimeout:10];
+    id<OFFTStompTransportAdapter> transport = nil;
     
-    self.stomp = [NXStompClient stompWithTransport:transport];
+    BOOL useSpring = YES;
+    if (useSpring) {
+        NSURL *webSocketURL = [NSURL URLWithString:@"http://localhost:8080/ws/websocket"];
+        transport = [OFFTStompSocketRocketTransport transportWithURL:webSocketURL];
+    } else {
+        transport = [OFFTStompGCDAsyncSocketTransport transportWithHost:@"localhost"
+                                                                 port:61613
+                                                    connectionTimeout:10];
+    }
+    
+    self.stomp = [OFFTStompClient stompWithTransport:transport];
     self.stomp.delegate = self;
 }
 
@@ -77,14 +82,14 @@
 
 #pragma mark - Stomp Delegate
 
-- (void)stompClientDidConnect:(NXStompClient *)stompClient {
+- (void)stompClientDidConnect:(OFFTStompClient *)stompClient {
     NSLog(@"DID CONNECT");
     self.disconnectButton.enabled = YES;
     self.subscribeButton.enabled = YES;
     self.unsubscribeButton.enabled = NO;
 }
 
-- (void)stompClient:(NXStompClient *)stompClient
+- (void)stompClient:(OFFTStompClient *)stompClient
 receivedMessageData:(NSData *)message
         withHeaders:(NSDictionary *)headers {
     NSLog(@"Received message: %@", message);
@@ -102,7 +107,7 @@ receivedMessageData:(NSData *)message
     
 }
 
-- (void)stompClient:(NXStompClient *)stompClient didDisconnectWithError:(NSError *)error {
+- (void)stompClient:(OFFTStompClient *)stompClient didDisconnectWithError:(NSError *)error {
     NSLog(@"DISCONNECTED %@", error);
     self.connectButton.enabled = YES;
     self.disconnectButton.enabled = NO;

@@ -1,54 +1,54 @@
 //
-//  NXStompClient.m
+//  OFFTStompClient.m
 //  Stompy
 //
 //  Created by Steve Wilford on 17/06/2015.
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompClient.h"
-#import "NXStompTransportAdapter.h"
-#import "NXStompFrame.h"
-#import "NXStompSubscription.h"
+#import "OFFTStompClient.h"
+#import "OFFTStompTransportAdapter.h"
+#import "OFFTStompFrame.h"
+#import "OFFTStompSubscription.h"
 
-#define NXSTOMPDEBUG 1
+#define OFFTSTOMPDEBUG 1
 
-#if NXSTOMPDEBUG
-#define NXSTOMPLOG NSLog
+#if OFFTSTOMPDEBUG
+#define OFFTSTOMPLOG NSLog
 #else
-#define NXSTOMPLOG
+#define OFFTSTOMPLOG
 #endif
 
-NSString * const NXStompErrorDomain = @"NXStompErrorDomain";
+NSString * const OFFTStompErrorDomain = @"OFFTStompErrorDomain";
 
 // Standard frame headers
-NSString * const NXStompHeaderAcceptVersion = @"accept-version";
-NSString * const NXStompHeaderVersion       = @"version";
-NSString * const NXStompHeaderHost          = @"host";
-NSString * const NXStompHeaderReceipt       = @"receipt";
-NSString * const NXStompHeaderDestination   = @"destination";
-NSString * const NXStompHeaderContentLength = @"content-length";
-NSString * const NXStompHeaderID            = @"id";
+NSString * const OFFTStompHeaderAcceptVersion = @"accept-version";
+NSString * const OFFTStompHeaderVersion       = @"version";
+NSString * const OFFTStompHeaderHost          = @"host";
+NSString * const OFFTStompHeaderReceipt       = @"receipt";
+NSString * const OFFTStompHeaderDestination   = @"destination";
+NSString * const OFFTStompHeaderContentLength = @"content-length";
+NSString * const OFFTStompHeaderID            = @"id";
 
 // Supported/accepted versions
-typedef NS_ENUM(NSUInteger, NXStompVersion) {
-    NXStompVersionUnknown,
-    NXStompVersion1_1,
-    NXStompVersion1_2,
+typedef NS_ENUM(NSUInteger, OFFTStompVersion) {
+    OFFTStompVersionUnknown,
+    OFFTStompVersion1_1,
+    OFFTStompVersion1_2,
 };
-NSString * const NXStompAcceptVersions = @"1.1,1.2";
+NSString * const OFFTStompAcceptVersions = @"1.1,1.2";
 
-typedef NS_ENUM(NSUInteger, NXStompState) {
-    NXStompStateDisconnected,
-    NXStompStateConnecting,
-    NXStompStateConnected,
-    NXStompStateDisconnecting,
+typedef NS_ENUM(NSUInteger, OFFTStompState) {
+    OFFTStompStateDisconnected,
+    OFFTStompStateConnecting,
+    OFFTStompStateConnected,
+    OFFTStompStateDisconnecting,
 };
 
-typedef void(^NXStompReceiptHandler)();
+typedef void(^OFFTStompReceiptHandler)();
 
-@interface NXStompClient () <NXStompTransportDelegate>
-@property (nonatomic, strong, nonnull) id<NXStompTransportAdapter> transport;
+@interface OFFTStompClient () <OFFTStompTransportDelegate>
+@property (nonatomic, strong, nonnull) id<OFFTStompTransportAdapter> transport;
 @property (nonatomic, copy) NSString *host;
 
 /**
@@ -57,11 +57,11 @@ typedef void(^NXStompReceiptHandler)();
 
 /**
  * The version of the STOMP protocol to use as negotiated with the server.
- * Defaults to NXStompVersionUnknown until a connection has been established.
+ * Defaults to OFFTStompVersionUnknown until a connection has been established.
  */
-@property (nonatomic, assign) NXStompVersion negotiatedVersion;
+@property (nonatomic, assign) OFFTStompVersion negotiatedVersion;
 
-@property (nonatomic, assign) NXStompState state;
+@property (nonatomic, assign) OFFTStompState state;
 
 /**
  *  A counter that can be used to generate unique receipt headers.
@@ -75,11 +75,11 @@ typedef void(^NXStompReceiptHandler)();
 
 @end
 
-@implementation NXStompClient
+@implementation OFFTStompClient
 
-+ (instancetype)stompWithTransport:(id<NXStompTransportAdapter>)transport {
++ (instancetype)stompWithTransport:(id<OFFTStompTransportAdapter>)transport {
     
-    NXStompClient *client = [[self alloc] init];
+    OFFTStompClient *client = [[self alloc] init];
     client.transport = transport;
     client.transport.delegate = client;
     return client;
@@ -90,14 +90,14 @@ typedef void(^NXStompReceiptHandler)();
 // TODO: login & passcode support
 // http://stomp.github.io/stomp-specification-1.2.html#CONNECT_or_STOMP_Frame
 - (void)connect {
-    self.state = NXStompStateConnecting;
+    self.state = OFFTStompStateConnecting;
     [self.transport open];
 }
 
 - (void)disconnect {
-    self.state = NXStompStateDisconnecting;
+    self.state = OFFTStompStateDisconnecting;
 
-    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandDisconnect];
+    OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:OFFTStompFrameCommandDisconnect];
     
     __weak typeof(self) weakSelf = self;
     [self sendFrame:frame withReceiptHandler:^{
@@ -135,7 +135,7 @@ typedef void(^NXStompReceiptHandler)();
 
     __block BOOL invalidHeaders = NO;
 
-    __block NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandSend];
+    __block OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:OFFTStompFrameCommandSend];
     
     // Add the user defined headers, ensuring they are comprised only of strings
     [headers enumerateKeysAndObjectsUsingBlock:^(id header, id value, BOOL *stop) {
@@ -156,8 +156,8 @@ typedef void(^NXStompReceiptHandler)();
         return;
     }
     
-    [frame setHeader:NXStompHeaderDestination value:destination];
-    [frame setHeader:NXStompHeaderContentLength
+    [frame setHeader:OFFTStompHeaderDestination value:destination];
+    [frame setHeader:OFFTStompHeaderContentLength
                value:[NSString stringWithFormat:@"%ld", messageData.length]];
     [frame setBody:messageData];
     
@@ -170,46 +170,46 @@ typedef void(^NXStompReceiptHandler)();
     
     NSString *identifier = [[NSUUID UUID] UUIDString];
     
-    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandSubscribe];
-    [frame setHeader:NXStompHeaderDestination value:destination];
-    [frame setHeader:NXStompHeaderID value:identifier];
+    OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:OFFTStompFrameCommandSubscribe];
+    [frame setHeader:OFFTStompHeaderDestination value:destination];
+    [frame setHeader:OFFTStompHeaderID value:identifier];
     
     [self sendFrame:frame];
     
-    return [[NXStompSubscription alloc] initWithIdentifier:identifier];
+    return [[OFFTStompSubscription alloc] initWithIdentifier:identifier];
 }
 
 - (void)unsubscribe:(id)subscription {
     // Protection
-    if ([subscription isKindOfClass:[NXStompSubscription class]] == NO) {
-        NSAssert(0, @"You must provide an NXStompSubscription object.");
+    if ([subscription isKindOfClass:[OFFTStompSubscription class]] == NO) {
+        NSAssert(0, @"You must provide an OFFTStompSubscription object.");
         return;
     }
     
-    NSString *identifier = [(NXStompSubscription *)subscription identifier];
+    NSString *identifier = [(OFFTStompSubscription *)subscription identifier];
     
-    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandUnsubscribe];
-    [frame setHeader:NXStompHeaderID value:identifier];
+    OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:OFFTStompFrameCommandUnsubscribe];
+    [frame setHeader:OFFTStompHeaderID value:identifier];
     
     [self sendFrame:frame];
 }
 
 #pragma mark - Transport Delegate
 
-- (void)transportDidOpen:(id<NXStompTransportAdapter>)transport {
+- (void)transportDidOpen:(id<OFFTStompTransportAdapter>)transport {
     
     // https://stomp.github.io/stomp-specification-1.2.html#CONNECT_or_STOMP_Frame
     // https://stomp.github.io/stomp-specification-1.1.html#CONNECT_or_STOMP_Frame
     
     // Construct the frame
     // 1.1 and 1.2 clients SHOULD continue to use the CONNECT command to remain backward compatible with STOMP 1.0 servers
-    NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:NXStompFrameCommandConnect];
+    OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:OFFTStompFrameCommandConnect];
     
-    [frame setHeader:NXStompHeaderAcceptVersion value:NXStompAcceptVersions];
+    [frame setHeader:OFFTStompHeaderAcceptVersion value:OFFTStompAcceptVersions];
     
     // TODO: This returns a bad connect ERROR from the server
     // Something to do with RabbitMQ
-    [frame setHeader:NXStompHeaderHost value:[self.transport host]];
+    [frame setHeader:OFFTStompHeaderHost value:[self.transport host]];
     
     // TODO: Heartbeat
     
@@ -218,32 +218,32 @@ typedef void(^NXStompReceiptHandler)();
     [self sendFrame:frame];
 }
 
-- (void)transportDidClose:(id<NXStompTransportAdapter>)transport {
+- (void)transportDidClose:(id<OFFTStompTransportAdapter>)transport {
     
     // Wipe out the receipt handlers and reset the counter
     _receiptHandlers = nil;
     _receiptCounter = 0;
     
-    self.state = NXStompStateDisconnected;
+    self.state = OFFTStompStateDisconnected;
     [self.delegate stompClient:self didDisconnectWithError:nil];
 }
 
-- (void)transport:(id<NXStompTransportAdapter>)transport didReceiveMessage:(NSString *)message {
+- (void)transport:(id<OFFTStompTransportAdapter>)transport didReceiveMessage:(NSString *)message {
     NSLog(@"Received message: %@", message);
     
-    NXStompFrame *frame = [self deserializeFrameFromString:message];
+    OFFTStompFrame *frame = [self deserializeFrameFromString:message];
     
-    if (self.state == NXStompStateConnecting) {
+    if (self.state == OFFTStompStateConnecting) {
         // We're expecting either a CONNECTED frame...
-        if (frame.command == NXStompFrameCommandConnected) {
+        if (frame.command == OFFTStompFrameCommandConnected) {
             [self handleConnectedFrame:frame];
         }
         
         // or an ERROR
-        else if (frame.command == NXStompFrameCommandError) {
-            self.state = NXStompStateDisconnected;
-            [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:NXStompErrorDomain
-                                                                                       code:NXStompConnectionError
+        else if (frame.command == OFFTStompFrameCommandError) {
+            self.state = OFFTStompStateDisconnected;
+            [self.delegate stompClient:self didDisconnectWithError:[NSError errorWithDomain:OFFTStompErrorDomain
+                                                                                       code:OFFTStompConnectionError
                                                                                    userInfo:nil]];
         }
         
@@ -252,13 +252,13 @@ typedef void(^NXStompReceiptHandler)();
     }
     
     // Handle regular messages
-    if (frame.command == NXStompFrameCommandMessage) {
+    if (frame.command == OFFTStompFrameCommandMessage) {
         [self handleMessageFrame:frame];
     }
     // Handle receipt frames
-    else if (frame.command == NXStompFrameCommandReceipt) {
-        NSString *receipt = [frame valueForHeader:NXStompHeaderReceipt];
-        NXStompReceiptHandler handler = _receiptHandlers[receipt];
+    else if (frame.command == OFFTStompFrameCommandReceipt) {
+        NSString *receipt = [frame valueForHeader:OFFTStompHeaderReceipt];
+        OFFTStompReceiptHandler handler = _receiptHandlers[receipt];
         if (handler) {
             handler();
             [_receiptHandlers removeObjectForKey:receipt];
@@ -268,27 +268,27 @@ typedef void(^NXStompReceiptHandler)();
 
 #pragma mark - Private
 
-- (void)sendFrame:(NXStompFrame *)frame {
-    if (self.state == NXStompStateDisconnecting
-    && frame.command != NXStompFrameCommandDisconnect) {
+- (void)sendFrame:(OFFTStompFrame *)frame {
+    if (self.state == OFFTStompStateDisconnecting
+    && frame.command != OFFTStompFrameCommandDisconnect) {
         NSAssert(0, @"Cannot send frames while in the process of disconnecting");
         return;
     }
     
     NSData *serializedFrame = [self serializeFrame:frame];
     
-#if NXSTOMPDEBUG
+#if OFFTSTOMPDEBUG
     NSLog(@"Sending message: %@", [[NSString alloc] initWithData:serializedFrame encoding:NSUTF8StringEncoding]);
 #endif
     
     [self.transport sendData:serializedFrame];
 }
 
-- (void)sendFrame:(NXStompFrame *)frame withReceiptHandler:(NXStompReceiptHandler)receiptHandler {
+- (void)sendFrame:(OFFTStompFrame *)frame withReceiptHandler:(OFFTStompReceiptHandler)receiptHandler {
     
     // Associate a receipt header with this frame before it is sent
     NSString *receipt = [NSString stringWithFormat:@"%lu", ++self.receiptCounter];
-    [frame setHeader:NXStompHeaderReceipt value:receipt];
+    [frame setHeader:OFFTStompHeaderReceipt value:receipt];
     
     // Track this receipt request
     self.receiptHandlers[receipt] = receiptHandler;
@@ -302,22 +302,22 @@ typedef void(^NXStompReceiptHandler)();
 
 #pragma mark - Private - Frame Handlers
 
-- (void)handleConnectedFrame:(NXStompFrame *)frame {
+- (void)handleConnectedFrame:(OFFTStompFrame *)frame {
     
-    NSString *negotiatedVersion = [frame valueForHeader:NXStompHeaderVersion];
+    NSString *negotiatedVersion = [frame valueForHeader:OFFTStompHeaderVersion];
     if ([negotiatedVersion isEqualToString:@"1.2"]) {
-        self.negotiatedVersion = NXStompVersion1_2;
+        self.negotiatedVersion = OFFTStompVersion1_2;
     } else if ([negotiatedVersion isEqualToString:@"1.1"]) {
-        self.negotiatedVersion = NXStompVersion1_1;
+        self.negotiatedVersion = OFFTStompVersion1_1;
     } else {
         NSAssert(0, @"Somehow managed to negotiate to an unknown protocol version.");
     }
     
-    self.state = NXStompStateConnected;
+    self.state = OFFTStompStateConnected;
     [self.delegate stompClientDidConnect:self];
 }
 
-- (void)handleMessageFrame:(NXStompFrame *)frame {
+- (void)handleMessageFrame:(OFFTStompFrame *)frame {
     
     // Data version of delegate method takes precendence
     if ([self.delegate respondsToSelector:@selector(stompClient:receivedMessageData:withHeaders:)]) {
@@ -341,33 +341,33 @@ typedef void(^NXStompReceiptHandler)();
 
 #pragma mark - Private - Utilities
 
-- (NSString *)stringForCommand:(NXStompFrameCommand)command {
+- (NSString *)stringForCommand:(OFFTStompFrameCommand)command {
     switch (command) {
-        case NXStompFrameCommandMessage:
+        case OFFTStompFrameCommandMessage:
             return @"MESSAGE";
 
-        case NXStompFrameCommandSend:
+        case OFFTStompFrameCommandSend:
             return @"SEND";
             
-        case NXStompFrameCommandSubscribe:
+        case OFFTStompFrameCommandSubscribe:
             return @"SUBSCRIBE";
             
-        case NXStompFrameCommandUnsubscribe:
+        case OFFTStompFrameCommandUnsubscribe:
             return @"UNSUBSCRIBE";
             
-        case NXStompFrameCommandError:
+        case OFFTStompFrameCommandError:
             return @"ERROR";
             
-        case NXStompFrameCommandReceipt:
+        case OFFTStompFrameCommandReceipt:
             return @"RECEIPT";
             
-        case NXStompFrameCommandConnect:
+        case OFFTStompFrameCommandConnect:
             return @"CONNECT";
             
-        case NXStompFrameCommandConnected:
+        case OFFTStompFrameCommandConnected:
             return @"CONNECTED";
             
-        case NXStompFrameCommandDisconnect:
+        case OFFTStompFrameCommandDisconnect:
             return @"DISCONNECT";
             
         default:
@@ -375,52 +375,52 @@ typedef void(^NXStompReceiptHandler)();
     }
 }
 
-- (NXStompFrameCommand)commandForString:(NSString *)commandString {
+- (OFFTStompFrameCommand)commandForString:(NSString *)commandString {
     if ([commandString isEqualToString:@"MESSAGE"]) {
-        return NXStompFrameCommandMessage;
+        return OFFTStompFrameCommandMessage;
         
     } else if ([commandString isEqualToString:@"SEND"]) {
-        return NXStompFrameCommandSend;
+        return OFFTStompFrameCommandSend;
         
     } else if ([commandString isEqualToString:@"SUBSCRIBE"]) {
-        return NXStompFrameCommandSubscribe;
+        return OFFTStompFrameCommandSubscribe;
         
     } else if ([commandString isEqualToString:@"UNSUBSCRIBE"]) {
-        return NXStompFrameCommandUnsubscribe;
+        return OFFTStompFrameCommandUnsubscribe;
         
     } else if ([commandString isEqualToString:@"ERROR"]) {
-        return NXStompFrameCommandError;
+        return OFFTStompFrameCommandError;
         
     } else if ([commandString isEqualToString:@"RECEIPT"]) {
-        return NXStompFrameCommandReceipt;
+        return OFFTStompFrameCommandReceipt;
         
     } else if ([commandString isEqualToString:@"CONNECT"]) {
-        return NXStompFrameCommandConnect;
+        return OFFTStompFrameCommandConnect;
         
     } else if ([commandString isEqualToString:@"CONNECTED"]) {
-        return NXStompFrameCommandConnected;
+        return OFFTStompFrameCommandConnected;
         
     } else if ([commandString isEqualToString:@"DISCONNECT"]) {
-        return NXStompFrameCommandDisconnect;
+        return OFFTStompFrameCommandDisconnect;
         
     } else {
-        return NXStompFrameCommandUnknown;
+        return OFFTStompFrameCommandUnknown;
     }
 }
 
 #pragma mark - Private - Frame Conversion
 
-- (NSData *)serializeFrame:(NXStompFrame *)frame {
+- (NSData *)serializeFrame:(OFFTStompFrame *)frame {
 
     NSData *eol = nil;
     // STOMP 1.2 uses carriage return + line feed
     // http://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames
-    if (self.negotiatedVersion == NXStompVersion1_2) {
+    if (self.negotiatedVersion == OFFTStompVersion1_2) {
         eol = [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding];
     }
     // STOMP 1.1 uses only line feed
     // http://stomp.github.io/stomp-specification-1.1.html#STOMP_Frames
-    else if (self.negotiatedVersion == NXStompVersion1_1) {
+    else if (self.negotiatedVersion == OFFTStompVersion1_1) {
         eol = [@"\n" dataUsingEncoding:NSUTF8StringEncoding];
     }
     
@@ -457,14 +457,14 @@ typedef void(^NXStompReceiptHandler)();
     return data;
 }
 
-- (NXStompFrame *)deserializeFrameFromString:(NSString *)frameString {
+- (OFFTStompFrame *)deserializeFrameFromString:(NSString *)frameString {
     NSArray *lines = [frameString componentsSeparatedByString:@"\n"];
     
     if (lines.count > 1) {
         
-        NXStompFrameCommand command = [self commandForString:lines[0]];
-        if (command != NXStompFrameCommandUnknown) {
-            NXStompFrame *frame = [[NXStompFrame alloc] initWithCommand:command];
+        OFFTStompFrameCommand command = [self commandForString:lines[0]];
+        if (command != OFFTStompFrameCommandUnknown) {
+            OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:command];
             
             // Parse headers
             for (int i=1; i < lines.count; ++i) {

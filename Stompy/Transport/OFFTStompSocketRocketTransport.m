@@ -1,19 +1,19 @@
 //
-//  NXStompSocketRocketTransport.m
+//  OFFTStompSocketRocketTransport.m
 //  Stompy
 //
 //  Created by Steve Wilford on 17/06/2015.
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompSocketRocketTransport.h"
+#import "OFFTStompSocketRocketTransport.h"
 #import "SRWebSocket.h"
 
-typedef NS_ENUM(NSUInteger, NXSocketRocketErrorCode) {
-    NXSocketRocketErrorCodeUpdgradeFailed = 2133,
+typedef NS_ENUM(NSUInteger, OFFTSocketRocketErrorCode) {
+    OFFTSocketRocketErrorCodeUpdgradeFailed = 2133,
 };
 
-@interface NXStompSocketRocketTransport () <SRWebSocketDelegate>
+@interface OFFTStompSocketRocketTransport () <SRWebSocketDelegate>
 
 - (instancetype)initWithURLRequest:(NSURLRequest *)request NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithURL:(NSURL *)URL;
@@ -23,14 +23,14 @@ typedef NS_ENUM(NSUInteger, NXSocketRocketErrorCode) {
 @property (nonatomic, copy) NSURLRequest *urlRequest;
 @end
 
-@implementation NXStompSocketRocketTransport
+@implementation OFFTStompSocketRocketTransport
 @synthesize delegate;
 
-+ (NXStompSocketRocketTransport *)transportWithURL:(NSURL *)URL {
++ (OFFTStompSocketRocketTransport *)transportWithURL:(NSURL *)URL {
     return [[self alloc] initWithURL:URL];
 }
 
-+ (NXStompSocketRocketTransport *)transportWithURLRequest:(NSURLRequest *)request {
++ (OFFTStompSocketRocketTransport *)transportWithURLRequest:(NSURLRequest *)request {
     return [[self alloc] initWithURLRequest:request];
 }
 
@@ -104,7 +104,7 @@ typedef NS_ENUM(NSUInteger, NXSocketRocketErrorCode) {
             [self handleSocketClosed];
         }
     } else if ([error.domain isEqualToString:SRWebSocketErrorDomain]) {
-        if (error.code == NXSocketRocketErrorCodeUpdgradeFailed) {
+        if (error.code == OFFTSocketRocketErrorCodeUpdgradeFailed) {
             [self handleSocketClosed];
         }
     }

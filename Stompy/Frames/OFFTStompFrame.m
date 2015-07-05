@@ -1,15 +1,15 @@
 //
-//  NXStompFrame.m
+//  OFFTStompFrame.m
 //  Stompy
 //
 //  Created by Steve Wilford on 17/06/2015.
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompFrame.h"
+#import "OFFTStompFrame.h"
 
-@interface NXStompFrame ()
-@property (nonatomic, assign) NXStompFrameCommand command;
+@interface OFFTStompFrame ()
+@property (nonatomic, assign) OFFTStompFrameCommand command;
 @property (nonatomic, strong) NSMutableDictionary *headers;
 
 @property (nonatomic, assign) BOOL mayHaveBody;
@@ -17,9 +17,9 @@
 
 @end
 
-@implementation NXStompFrame
+@implementation OFFTStompFrame
 
-- (instancetype)initWithCommand:(NXStompFrameCommand)command {
+- (instancetype)initWithCommand:(OFFTStompFrameCommand)command {
     self = [super init];
     if (self) {
         _command = command;
@@ -28,9 +28,9 @@
         // https://stomp.github.io/stomp-specification-1.2.html#Body
         // https://stomp.github.io/stomp-specification-1.1.html#Value_Encoding
         switch (_command) {
-            case NXStompFrameCommandSend:
-            case NXStompFrameCommandMessage:
-            case NXStompFrameCommandError:
+            case OFFTStompFrameCommandSend:
+            case OFFTStompFrameCommandMessage:
+            case OFFTStompFrameCommandError:
                 _mayHaveBody = YES;
                 break;
             default:

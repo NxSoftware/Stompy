@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompClient.h"
+#import "OFFTStompClient.h"
 
 
 // TODO: Refactor these into their own framework
-#import "NXStompSocketRocketTransport.h"
-#import "NXStompGCDAsyncSocketTransport.h"
+#import "OFFTStompSocketRocketTransport.h"
+#import "OFFTStompGCDAsyncSocketTransport.h"

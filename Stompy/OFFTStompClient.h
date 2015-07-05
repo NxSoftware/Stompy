@@ -1,5 +1,5 @@
 //
-//  NXStompClient.h
+//  OFFTStompClient.h
 //  Stompy
 //
 //  Created by Steve Wilford on 17/06/2015.
@@ -7,24 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "NXStompTransportAdapter.h"
+#import "OFFTStompTransportAdapter.h"
 
-@class NXStompClient;
+@class OFFTStompClient;
 
-extern NSString * const NXStompErrorDomain;
+extern NSString * const OFFTStompErrorDomain;
 
-typedef NS_ENUM(NSUInteger, NXStompError) {
-    NXStompConnectionError = 1,
+typedef NS_ENUM(NSUInteger, OFFTStompError) {
+    OFFTStompConnectionError = 1,
 };
 
-@protocol NXStompClientDelegate <NSObject>
+@protocol OFFTStompClientDelegate <NSObject>
 
 /**
  *  The STOMP client successfully established a connection with the server.
  *
  *  @param stompClient The STOMP client.
  */
-- (void)stompClientDidConnect:(NXStompClient *)stompClient;
+- (void)stompClientDidConnect:(OFFTStompClient *)stompClient;
 
 /**
  *  The connection to the STOMP server has ended.
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
  *  @param stompClient The STOMP client.
  *  @param error       An error detailing why the connection ended, or nil if it the disconnection was expected.
  */
-- (void)stompClient:(NXStompClient *)stompClient didDisconnectWithError:(NSError *)error;
+- (void)stompClient:(OFFTStompClient *)stompClient didDisconnectWithError:(NSError *)error;
 
 @optional
 
@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
  *  @param message     The body of the received message.
  *  @param headers     The headers of the received message.
  */
-- (void)stompClient:(NXStompClient *)stompClient
+- (void)stompClient:(OFFTStompClient *)stompClient
     receivedMessage:(NSString *)message
         withHeaders:(NSDictionary *)headers;
 
@@ -68,24 +68,24 @@ typedef NS_ENUM(NSUInteger, NXStompError) {
  *  @param messageData The body of the received message.
  *  @param headers     The headers of the received message.
  */
-- (void)stompClient:(NXStompClient *)stompClient
+- (void)stompClient:(OFFTStompClient *)stompClient
 receivedMessageData:(NSData *)messageData
         withHeaders:(NSDictionary *)headers;
 
 @end
 
-@interface NXStompClient : NSObject
+@interface OFFTStompClient : NSObject
 
-@property (nonatomic, weak) id<NXStompClientDelegate> delegate;
+@property (nonatomic, weak) id<OFFTStompClientDelegate> delegate;
 
 /**
  *  Creates a new STOMP client that will connect over the provided transport.
  *
  *  @param transport A transport adapter that will handle the sending & receiving of data.
  *
- *  @return A new NXStompClient instance
+ *  @return A new OFFTStompClient instance
  */
-+ (instancetype)stompWithTransport:(id<NXStompTransportAdapter>)transport;
++ (instancetype)stompWithTransport:(id<OFFTStompTransportAdapter>)transport;
 
 - (void)connect;
 

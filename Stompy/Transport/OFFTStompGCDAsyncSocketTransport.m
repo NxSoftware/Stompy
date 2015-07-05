@@ -1,17 +1,17 @@
 //
-//  NXStompGCDAsyncSocketTransport.m
+//  OFFTStompGCDAsyncSocketTransport.m
 //  Stompy
 //
 //  Created by Steve Wilford on 19/06/2015.
 //  Copyright (c) 2015 Steve Wilford. All rights reserved.
 //
 
-#import "NXStompGCDAsyncSocketTransport.h"
+#import "OFFTStompGCDAsyncSocketTransport.h"
 #import "GCDAsyncSocket.h"
 
 #define GCDAsyncSocketLoggingEnabled 1
 
-@interface NXStompGCDAsyncSocketTransport () <GCDAsyncSocketDelegate>
+@interface OFFTStompGCDAsyncSocketTransport () <GCDAsyncSocketDelegate>
 @property (nonatomic, strong) GCDAsyncSocket *socket;
 
 @property (nonatomic, copy) NSString *host;
@@ -20,10 +20,10 @@
 
 @end
 
-@implementation NXStompGCDAsyncSocketTransport
+@implementation OFFTStompGCDAsyncSocketTransport
 @synthesize delegate;
 
-+ (NXStompGCDAsyncSocketTransport *)transportWithHost:(NSString *)host
++ (OFFTStompGCDAsyncSocketTransport *)transportWithHost:(NSString *)host
                                                  port:(uint16_t)port
                                     connectionTimeout:(NSTimeInterval)connectionTimeout {
     
