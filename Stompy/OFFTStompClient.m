@@ -206,9 +206,6 @@ typedef void(^OFFTStompReceiptHandler)();
     OFFTStompFrame *frame = [[OFFTStompFrame alloc] initWithCommand:OFFTStompFrameCommandConnect];
     
     [frame setHeader:OFFTStompHeaderAcceptVersion value:OFFTStompAcceptVersions];
-    
-    // TODO: This returns a bad connect ERROR from the server
-    // Something to do with RabbitMQ
     [frame setHeader:OFFTStompHeaderHost value:[self.transport host]];
     
     // TODO: Heartbeat
